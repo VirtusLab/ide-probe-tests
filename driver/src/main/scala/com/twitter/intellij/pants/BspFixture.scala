@@ -39,6 +39,7 @@ trait BspFixture {
       "launch",
       s"org.scalameta:fastpass_2.12:$fastpassVersion",
       "-r", "sonatype:snapshots",
+      "--quiet",
       "--main", "scala.meta.fastpass.Fastpass",
       "--"
     ) ++ args
