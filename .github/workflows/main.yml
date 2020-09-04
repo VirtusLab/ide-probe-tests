@@ -3,27 +3,22 @@ name: Build
 on: [pull_request]
 
 jobs:
-  build:
+
+  test-suite:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        suite-name: ["com.twitter.intellij.pants.Suite1", "com.twitter.intellij.pants.Suite2"]
         os: [ubuntu-latest]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2.0.0
-      - run: git fetch --prune --unshallow
       - name: Prepare the container
         run: |
           docker build --tag ideprobe-pants:local .
-      - name: Suite 1
+      - name: Run ${{ matrix.suite-name }}
         env:
-          TEST_PATTERN: "com.twitter.intellij.pants.Suite1"
-        run: |
-          echo $TEST_PATTERN
-          ./ci/run_docker.sh bash ci/test.sh
-      - name: Suite 2
-        env:
-          TEST_PATTERN: "com.twitter.intellij.pants.Suite2"
+          TEST_PATTERN: ${{ matrix.suite-name }}
         run: |
           echo $TEST_PATTERN
           ./ci/run_docker.sh bash ci/test.sh
