@@ -3,11 +3,14 @@ package com.twitter.intellij.pants
 import org.virtuslab.ideprobe.IntegrationTestSuite
 import org.virtuslab.ideprobe.IntelliJFixture
 import org.virtuslab.ideprobe.ProbeDriver
+import org.virtuslab.ideprobe.dependencies.DependencyProvider
 import org.virtuslab.ideprobe.dependencies.Plugin
+import org.virtuslab.ideprobe.pants.PantsPluginBuilder
 
 import scala.language.implicitConversions
 
 class PantsTestSuite extends IntegrationTestSuite with OpenProjectFixture {
+  DependencyProvider.registerBuilder(PantsPluginBuilder)
 
   val pantsProbePlugin: Plugin = Plugin.Bundled(s"ideprobe-pants-${BuildInfo.version}.zip")
 
