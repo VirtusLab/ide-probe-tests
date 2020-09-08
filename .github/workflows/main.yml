@@ -30,3 +30,8 @@ jobs:
         run: |
           echo $TEST_PATTERN
           ./ci/run_docker.sh bash ci/test.sh
+      - name: Environment checks
+        if: always()
+        run: |
+          df -h
+          du -c -h --max-depth=4 --time --threshold=500M / || true
