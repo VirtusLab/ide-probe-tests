@@ -8,8 +8,8 @@ import com.twitter.intellij.pants.protocol
 import com.twitter.intellij.pants.settings.PantsProjectSettings
 import com.twitter.intellij.pants.settings.{PantsSettings => PantsSettingsFromPlugin}
 import com.twitter.intellij.pants.util.PantsConstants
-import org.virtuslab.handlers.BackgroundTasks
-import org.virtuslab.handlers.Projects
+import org.virtuslab.ideprobe.handlers.BackgroundTasks
+import org.virtuslab.ideprobe.handlers.Projects
 import org.virtuslab.ideprobe.protocol.ProjectRef
 import org.virtuslab.ideprobe.protocol.Setting
 import org.virtuslab.ideprobe.Extensions._

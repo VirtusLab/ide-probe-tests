@@ -9,7 +9,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.virtuslab.ideprobe.ConfigFormat
 import org.virtuslab.ideprobe.RunningIntelliJFixture
-import org.virtuslab.ideprobe.RunningIntellijPerSuite
+import org.virtuslab.ideprobe.junit4.RunningIntelliJPerSuite
 import org.virtuslab.ideprobe.Shell
 import org.virtuslab.ideprobe.protocol.FileRef
 import org.virtuslab.ideprobe.protocol.ModuleRef
@@ -129,7 +129,7 @@ object OpenProjectTestFixture extends ConfigFormat {
 
 // Because RunningIntellijPerSuite uses @BeforeClass, which must be static, this trait must be
 // mixed in to an companion object of actual test class
-trait OpenProjectTestFixture extends PantsTestSuite with RunningIntellijPerSuite with ConfigFormat {
+trait OpenProjectTestFixture extends PantsTestSuite with RunningIntelliJPerSuite with ConfigFormat {
   override protected def baseFixture = fixtureFromConfig()
 
   override def beforeAll(): Unit = {
