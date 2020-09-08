@@ -4,8 +4,8 @@ import com.twitter.intellij.pants.probe.handlers.PantsImport
 import com.twitter.intellij.pants.probe.handlers.PantsSettings
 import com.twitter.intellij.pants.probe.handlers.PythonProject
 import com.twitter.intellij.pants.protocol.PantsEndpoints
-import org.virtuslab.ProbeHandlerContributor
-import org.virtuslab.ProbeHandlers.ProbeHandler
+import org.virtuslab.ideprobe.ProbeHandlerContributor
+import org.virtuslab.ideprobe.ProbeHandlers.ProbeHandler
 
 class PantsProbeHandlerContributor extends ProbeHandlerContributor {
   override def registerHandlers(handler: ProbeHandler): ProbeHandler = {

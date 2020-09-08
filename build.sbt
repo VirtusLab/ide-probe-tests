@@ -58,7 +58,7 @@ lazy val pantsProbeDriver = project
   .dependsOn(pantsProbeApi)
   .settings(
     name := "pants-probe-driver",
-    libraryDependencies += Dependencies.ideProbe.jUnitDriver,
+    libraryDependencies += Dependencies.ideProbe.driver,
     buildInfoKeys := Seq[BuildInfoKey](version),
     buildInfoPackage := "com.twitter.intellij.pants"
   )
@@ -70,6 +70,7 @@ lazy val pantsTests = project
   .usesIdeaPlugin(pantsProbePlugin)
   .settings(
     name := "pants-tests",
+    libraryDependencies += Dependencies.ideProbe.jUnitDriver,
     libraryDependencies ++= Dependencies.junit
   )
 

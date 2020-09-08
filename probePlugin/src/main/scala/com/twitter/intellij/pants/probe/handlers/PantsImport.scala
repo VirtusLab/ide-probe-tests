@@ -14,8 +14,8 @@ import com.twitter.intellij.pants.service.project.wizard.PantsProjectImportProvi
 import com.twitter.intellij.pants.settings.ImportFromPantsControl
 import com.twitter.intellij.pants.settings.PantsProjectSettingsControl
 import javax.swing.JSpinner
-import org.virtuslab.handlers.IntelliJApi
-import org.virtuslab.handlers.Projects
+import org.virtuslab.ideprobe.handlers.IntelliJApi
+import org.virtuslab.ideprobe.handlers.Projects
 import org.virtuslab.ideprobe.protocol.ProjectRef
 import org.virtuslab.ideprobe.protocol.Setting
 import org.virtuslab.ideprobe.protocol.Setting.Changed
