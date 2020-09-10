@@ -13,6 +13,14 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v2.0.0
+      - name: Remove redundant packages
+        run: |
+          df -h
+          #TODO find out the packages that own these files and uninstall them properly
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/share/swift
+          sudo rm -rf /usr/local/lib/android
+          df -h
       - name: Prepare the container
         run: |
           docker build --tag ideprobe-pants:local .
