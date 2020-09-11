@@ -3,7 +3,7 @@ set -x
 
 export IDEPROBE_DISPLAY=xvfb
 
-apt install -y zip
+#apt install -y zip
 if [ -z "${TEST_PATTERN}" ]; then
   sbt "pantsTests/test"
 else
