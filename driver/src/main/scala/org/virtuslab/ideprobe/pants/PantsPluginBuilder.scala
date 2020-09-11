@@ -26,7 +26,7 @@ object PantsPluginBuilder extends DependencyBuilder(Id("pants")) {
     val localRepo = GitUtils.clone(repository)
 
     val setupCiEnvironment = List("./scripts/setup-ci-environment.sh")
-    val result0 = Shell.run(localRepo, Map.empty[String, String], setupCiEnvironment: _*)
+    val result0 = Shell.run(localRepo, setupCiEnvironment: _*)
     if (result0.exitCode != 0) throw new Exception(s"Couldn't set up ci environment. STDERR:\n${result0.err}")
 
     val env = Map("TRAVIS_BRANCH" -> "master")
