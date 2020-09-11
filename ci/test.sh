@@ -4,6 +4,7 @@ set -x
 export IDEPROBE_DISPLAY=xvfb
 
 apt install -y zip
+which rustc
 if [ -z "${TEST_PATTERN}" ]; then
   sbt "pantsTests/test"
 else
