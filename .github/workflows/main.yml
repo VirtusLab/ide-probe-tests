@@ -35,3 +35,9 @@ jobs:
         run: |
           df -h
           du -c -h --max-depth=4 --time --threshold=500M / || true
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: screenshots-${{ matrix.suite-name }}
+          path: /tmp/ideprobe/output
