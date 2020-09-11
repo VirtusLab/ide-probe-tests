@@ -24,6 +24,12 @@ jobs:
       - name: Prepare the container
         run: |
           docker build --tag ideprobe-pants:local .
+      - name: Prepare pants
+        env:
+          TEST_PATTERN: com.twitter.intellij.pants.PreparePants
+        run: |
+          echo $TEST_PATTERN
+          ./ci/run_docker.sh bash ci/test.sh
       - name: Run ${{ matrix.suite-name }}
         env:
           TEST_PATTERN: ${{ matrix.suite-name }}
