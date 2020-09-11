@@ -8,7 +8,8 @@ import org.virtuslab.ideprobe.dependencies.SourceRepository.Git
 
 object GitUtils {
   def clone(repository: Git): Path = {
-    val localRepo = Files.createTempDirectory("scala-plugin-repo")
+    val repoName = repository.path.getPath.split('/').last
+    val localRepo = Files.createTempDirectory(s"git-$repoName")
     val cloned = Shell.run("git", "clone", repository.path.toString, localRepo.toString)
     if (cloned.exitCode != 0) throw new IllegalStateException(s"Could not clone git $repository")
     repository.ref.foreach { ref =>
