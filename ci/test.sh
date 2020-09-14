@@ -3,9 +3,8 @@ set -x
 
 export IDEPROBE_DISPLAY=xvfb
 
-apt install -y zip
-sbt "ciSetup/testOnly com.twitter.intellij.pants.PreparePants"
-echo "ALL PANTS READY!"
+TEST_PATTERN="com.twitter.intellij.pants.PantsSettingsTest"
+
 if [ -z "${TEST_PATTERN}" ]; then
   sbt "pantsTests/test"
 else
