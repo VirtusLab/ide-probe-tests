@@ -2,9 +2,8 @@
 
 # script to setup new image (best to do on each intellij version bump)
 
-USERNAME=lwawrzyk
+USERNAME=odisseus
 IJ_VERSION=202.6948.69
 
-docker login --username=$USERNAME
-DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --tag $USERNAME/ideprobe-pants:$IJ_VERSION -f ideprobe/Dockerfile.deps ideprobe
-docker push $USERNAME/ideprobe-pants
+DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --tag $USERNAME/ideprobe-pants:$IJ_VERSION -f Dockerfile.deps .
+docker push $USERNAME/ideprobe-pants:$IJ_VERSION
