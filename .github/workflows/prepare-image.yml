@@ -1,0 +1,12 @@
+name: Manual Build
+
+on: workflow_dispatch
+
+jobs:
+  bar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.0.0
+      - name: Hello
+        run: |
+          echo 'Hello'
