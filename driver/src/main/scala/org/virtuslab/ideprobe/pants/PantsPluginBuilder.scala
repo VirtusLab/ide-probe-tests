@@ -1,9 +1,11 @@
 package org.virtuslab.ideprobe.pants
 
 import java.io.InputStream
+import java.nio.file.Paths
 
 import org.virtuslab.ideprobe.Extensions._
 import org.virtuslab.ideprobe.Id
+import org.virtuslab.ideprobe.ProbeExtensions
 import org.virtuslab.ideprobe.Shell
 import org.virtuslab.ideprobe.dependencies.DependencyBuilder
 import org.virtuslab.ideprobe.dependencies.Resource
@@ -12,7 +14,7 @@ import org.virtuslab.ideprobe.dependencies.SourceRepository
 import org.virtuslab.ideprobe.dependencies.SourceRepository.Git
 import org.virtuslab.ideprobe.util.GitUtils
 
-object PantsPluginBuilder extends DependencyBuilder(Id("pants")) {
+object PantsPluginBuilder extends DependencyBuilder(Id("pants")) with ProbeExtensions {
   def build(repository: SourceRepository, resources: ResourceProvider): Resource =
     repository match {
       case git: Git =>
@@ -35,11 +37,17 @@ object PantsPluginBuilder extends DependencyBuilder(Id("pants")) {
     if (result.exitCode != 0) throw new Exception(s"Couldn't build pants plugin. STDERR:\n${result.err}")
 
     val files = localRepo.toFile.listFiles()
-    val pantsPath = files.find(_.getName.matches("pants_.*\\.zip")).getOrElse {
+    val output = files.find(_.getName.matches("pants_.*\\.zip")).getOrElse {
       throw new Exception(s"Couldn't find pants archive. Existing files:\n${files.mkString("\n")}")
     }
-    println(s"Built pants at $pantsPath")
-    pantsPath.toPath.inputStream
+
+    val pantsPath = Paths.get("/tmp", "pants.zip")
+    output.renameTo(pantsPath.toFile)
+    if(java.nio.file.Files.exists(pantsPath)) {
+      println(s"Built pants at $pantsPath")
+      localRepo.delete()
+      pantsPath.inputStream
+    } else throw new Exception(s"Could not move $output to $pantsPath")
   }
 
 }
