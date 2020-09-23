@@ -7,7 +7,7 @@ object Dependencies {
   )
 
   object ideProbe {
-    val version = "0.1.3+73-92b975e7-SNAPSHOT"
+    val version = "0.1.3+84-5727964b-SNAPSHOT"
 
     val resolvers = Seq(
       Resolver.sonatypeRepo("public"),
@@ -23,6 +23,7 @@ object Dependencies {
     val driver = apply("driver")
     val jUnitDriver = apply("junit-driver")
     val probePlugin = apply("probe-plugin")
+    val probeScalaDriver = apply("scala-probe-driver")
   }
 
 }

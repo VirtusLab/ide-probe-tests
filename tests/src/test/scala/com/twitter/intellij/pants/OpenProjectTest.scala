@@ -1,22 +1,14 @@
 package com.twitter.intellij.pants
 
-import java.nio.file.Path
-
 import com.twitter.intellij.pants.OpenProjectTestFixture.TestData
 import com.twitter.intellij.pants.protocol.PythonFacet
-import org.junit.Assert
+import java.nio.file.Path
 import org.junit.Assert.assertEquals
-import org.junit.Test
-import org.virtuslab.ideprobe.ConfigFormat
-import org.virtuslab.ideprobe.RunningIntelliJFixture
+import org.junit.{Assert, Test}
 import org.virtuslab.ideprobe.junit4.RunningIntelliJPerSuite
-import org.virtuslab.ideprobe.Shell
-import org.virtuslab.ideprobe.protocol.FileRef
-import org.virtuslab.ideprobe.protocol.ModuleRef
-import org.virtuslab.ideprobe.protocol.ProjectRef
-import org.virtuslab.ideprobe.protocol.RunFixesSpec
-import org.virtuslab.ideprobe.protocol.SourceFolder
-import org.virtuslab.ideprobe.protocol.VcsRoot
+import org.virtuslab.ideprobe.protocol.{FileRef, ModuleRef, ProjectRef, RunFixesSpec, SourceFolder, VcsRoot}
+import org.virtuslab.ideprobe.scala.ScalaPluginExtension
+import org.virtuslab.ideprobe.{ConfigFormat, RunningIntelliJFixture, Shell}
 import pureconfig.ConfigReader
 import pureconfig.generic.semiauto.deriveReader
 
@@ -66,10 +58,9 @@ class OpenProjectTestBsp extends CommonOpenProjectTests {
   // TODO add to common OpenProjectTest when it works with pants
   @Test def hasGitRepositoryRootDetected(): Unit = {
     val actualVcsRoots = intelliJ.probe.vcsRoots()
-    val expectedRoot = VcsRoot("Git", intelliJ.workspace)
+    val expectedRoot = VcsRoot("Git", intelliJ.workspace.toRealPath())
     assertEquals(Seq(expectedRoot), actualVcsRoots)
   }
-
 }
 
 abstract class CommonOpenProjectTests {
@@ -83,8 +74,8 @@ abstract class CommonOpenProjectTests {
   }
 
   @Test def hasExpectedModules(): Unit = {
-    def relative(absolutePath: Path): Path = intelliJ.workspace.relativize(absolutePath)
-
+    def relative(absolutePath: Path): Path = intelliJ.workspace.toRealPath().relativize(absolutePath)
+    
     val projectModel = intelliJ.probe.projectModel()
 
     val expectedModules = intelliJ.config[Seq[TestData.Module]]("project.modules")
@@ -104,10 +95,10 @@ abstract class CommonOpenProjectTests {
 
   @Test def hasModuleSdksSet(): Unit = {
     val project = intelliJ.probe.projectModel()
-    val expectedModules = intelliJ.config[Seq[TestData.Module]]("project.modules").map(_.name)
+    val expectedModulesWithSdk = intelliJ.config[Seq[TestData.Module]]("project.modules").map(_.name)
 
     val modulesWithoutSdk = project.modules
-      .filter(module => module.kind.isDefined && expectedModules.contains(module.name))
+      .filter(module => module.kind.isDefined && expectedModulesWithSdk.contains(module.name))
       .map(m => ModuleRef(m.name))
       .filter(module => intelliJ.probe.moduleSdk(module).isEmpty)
 
@@ -146,4 +137,20 @@ object OpenProjectTestPants extends OpenProjectTestFixture {
 
 object OpenProjectTestBsp extends OpenProjectTestFixture {
   override def openProject(): ProjectRef = openProjectWithBsp(intelliJ)
+}
+
+object OpenProjectTestFastpass extends OpenProjectTestFixture with ScalaPluginExtension {
+  private def targetsFromConfig(intelliJ: RunningIntelliJFixture): Seq[String] =  {
+    intelliJ.config[Seq[String]]("pants.import.targets")
+  }
+
+  override def openProject(): ProjectRef = {
+    val path =  intelliJ.workspace.resolve(targetsFromConfig(intelliJ).head)
+    val project = intelliJ.probe.importBspProject(path)
+    project
+  }
+}
+
+class OpenProjectTestFastpass extends CommonOpenProjectTests {
+  override def intelliJ: RunningIntelliJFixture = OpenProjectTestFastpass.intelliJ
 }

@@ -23,7 +23,8 @@ val pluginSettings = Seq(
   intellijPlugins ++= Seq(
     "com.intellij.java".toPlugin,
     "JUnit".toPlugin,
-    "PythonCore".toPlugin
+    "PythonCore".toPlugin,
+    "org.intellij.scala".toPlugin,
   )
 )
 
@@ -59,6 +60,7 @@ lazy val pantsProbeDriver = project
   .settings(
     name := "pants-probe-driver",
     libraryDependencies += Dependencies.ideProbe.driver,
+    libraryDependencies += Dependencies.ideProbe.probeScalaDriver,
     buildInfoKeys := Seq[BuildInfoKey](version),
     buildInfoPackage := "com.twitter.intellij.pants"
   )

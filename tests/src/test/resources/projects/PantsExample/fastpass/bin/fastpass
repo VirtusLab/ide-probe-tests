@@ -1,0 +1,3 @@
+#!/bin/bash
+COURSIER="$(dirname $0)/coursier"
+exec $COURSIER launch fastpass --contrib -- "$@"
