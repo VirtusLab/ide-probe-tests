@@ -9,8 +9,9 @@ import com.twitter.intellij.pants.protocol.PythonFacet
 import org.virtuslab.ideprobe.ProbeDriver
 import org.virtuslab.ideprobe.protocol.IdeNotification
 import org.virtuslab.ideprobe.protocol.ProjectRef
-import org.virtuslab.ideprobe.RobotExtensions._
 import org.virtuslab.ideprobe.protocol.ModuleRef
+import org.virtuslab.ideprobe.robot.RobotProbeDriver
+import org.virtuslab.ideprobe.robot.RobotSyntax._
 
 import scala.concurrent.duration._
 import scala.util.Failure
@@ -46,9 +47,10 @@ final class PantsProbeDriver(val driver: ProbeDriver) extends AnyVal {
   def compileAllTargets(timeout: Duration = 10.minutes): PantsBuildResult = {
     driver.invokeAction("com.twitter.intellij.pants.compiler.actions.PantsCompileAllTargetsAction")
     val compiledNotification = Try(driver.awaitNotification("Compile message", timeout))
+    val robot = RobotProbeDriver(driver).robot
 
     val output = (for {
-      panel <- driver.robot.findOpt(query.className("PantsConsoleViewPanel"))
+      panel <- robot.findOpt(query.className("PantsConsoleViewPanel"))
       editor <- panel.findOpt(query.className("EditorComponentImpl"))
     } yield editor.fullText).getOrElse("<output not found>")
 

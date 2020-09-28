@@ -2,11 +2,13 @@ package com.twitter.intellij.pants
 
 import org.virtuslab.ideprobe.dependencies.{DependencyProvider, Plugin}
 import org.virtuslab.ideprobe.pants.PantsPluginBuilder
+import org.virtuslab.ideprobe.robot.RobotPluginExtension
 import org.virtuslab.ideprobe.{IdeProbeFixture, ProbeDriver}
+
 import scala.language.implicitConversions
 
 
-trait PantsPluginExtension extends OpenProjectFixture { this: IdeProbeFixture =>
+trait PantsPluginExtension extends OpenProjectFixture with RobotPluginExtension { this: IdeProbeFixture =>
   val pantsProbePlugin: Plugin = Plugin.Bundled(s"ideprobe-pants-${BuildInfo.version}.zip")
 
   DependencyProvider.registerBuilder(PantsPluginBuilder)

@@ -5,9 +5,9 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
+import org.virtuslab.ideprobe.CommandResult
 import org.virtuslab.ideprobe.Config
 import org.virtuslab.ideprobe.Shell
-import org.virtuslab.ideprobe.Shell.CommandResult
 
 trait BspFixture {
   lazy val coursierPath: Path = {
