@@ -52,8 +52,7 @@ class OpenProjectTestPants extends CommonOpenProjectTests {
 
 }
 
-class OpenProjectTestBsp extends CommonOpenProjectTests {
-  override def intelliJ: RunningIntelliJFixture = OpenProjectTestBsp.intelliJ
+trait OpenProjectTestBspBase extends CommonOpenProjectTests {
 
   // TODO add to common OpenProjectTest when it works with pants
   @Test def hasGitRepositoryRootDetected(): Unit = {
@@ -61,6 +60,10 @@ class OpenProjectTestBsp extends CommonOpenProjectTests {
     val expectedRoot = VcsRoot("Git", intelliJ.workspace.toRealPath())
     assertEquals(Seq(expectedRoot), actualVcsRoots)
   }
+}
+
+class OpenProjectTestBsp extends OpenProjectTestBspBase {
+  override def intelliJ: RunningIntelliJFixture = OpenProjectTestBsp.intelliJ
 }
 
 abstract class CommonOpenProjectTests {
@@ -151,6 +154,6 @@ object OpenProjectTestFastpass extends OpenProjectTestFixture with ScalaPluginEx
   }
 }
 
-class OpenProjectTestFastpass extends CommonOpenProjectTests {
+class OpenProjectTestFastpass extends OpenProjectTestBspBase {
   override def intelliJ: RunningIntelliJFixture = OpenProjectTestFastpass.intelliJ
 }

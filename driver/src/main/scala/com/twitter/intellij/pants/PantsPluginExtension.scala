@@ -2,7 +2,6 @@ package com.twitter.intellij.pants
 
 import org.virtuslab.ideprobe.dependencies.{DependencyProvider, Plugin}
 import org.virtuslab.ideprobe.pants.PantsPluginBuilder
-import org.virtuslab.ideprobe.scala.ScalaProbeDriver
 import org.virtuslab.ideprobe.{IdeProbeFixture, ProbeDriver}
 import scala.language.implicitConversions
 
