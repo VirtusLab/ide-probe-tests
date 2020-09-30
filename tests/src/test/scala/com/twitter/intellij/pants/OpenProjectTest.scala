@@ -62,8 +62,8 @@ trait OpenProjectTestBspBase extends CommonOpenProjectTests {
   }
 }
 
-class OpenProjectTestBsp extends OpenProjectTestBspBase {
-  override def intelliJ: RunningIntelliJFixture = OpenProjectTestBsp.intelliJ
+class OpenProjectTestFastpassWithCmdLine extends OpenProjectTestBspBase {
+  override def intelliJ: RunningIntelliJFixture = OpenProjectTestFastpassWithCmdLine.intelliJ
 }
 
 abstract class CommonOpenProjectTests {
@@ -78,7 +78,7 @@ abstract class CommonOpenProjectTests {
 
   @Test def hasExpectedModules(): Unit = {
     def relative(absolutePath: Path): Path = intelliJ.workspace.toRealPath().relativize(absolutePath)
-    
+
     val projectModel = intelliJ.probe.projectModel()
 
     val expectedModules = intelliJ.config[Seq[TestData.Module]]("project.modules")
@@ -138,11 +138,11 @@ object OpenProjectTestPants extends OpenProjectTestFixture {
   override def openProject(): ProjectRef = openProjectWithPants(intelliJ)
 }
 
-object OpenProjectTestBsp extends OpenProjectTestFixture {
+object OpenProjectTestFastpassWithCmdLine extends OpenProjectTestFixture {
   override def openProject(): ProjectRef = openProjectWithBsp(intelliJ)
 }
 
-object OpenProjectTestFastpass extends OpenProjectTestFixture with ScalaPluginExtension {
+object OpenProjectTestFastpassWithWizard extends OpenProjectTestFixture with ScalaPluginExtension {
   private def targetsFromConfig(intelliJ: RunningIntelliJFixture): Seq[String] =  {
     intelliJ.config[Seq[String]]("pants.import.targets")
   }
@@ -154,6 +154,6 @@ object OpenProjectTestFastpass extends OpenProjectTestFixture with ScalaPluginEx
   }
 }
 
-class OpenProjectTestFastpass extends OpenProjectTestBspBase {
-  override def intelliJ: RunningIntelliJFixture = OpenProjectTestFastpass.intelliJ
+class OpenProjectTestFastpassWithWizard extends OpenProjectTestBspBase {
+  override def intelliJ: RunningIntelliJFixture = OpenProjectTestFastpassWithWizard.intelliJ
 }
