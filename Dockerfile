@@ -1,3 +1,3 @@
-FROM odisseus/ideprobe-pants:202.6948.69
+FROM odisseus/ideprobe-pants:latest
 ADD . /workspace
 WORKDIR /workspace
