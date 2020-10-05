@@ -16,7 +16,8 @@ RUN --mount=type=bind,rw,source=.,target=. set -x \
  && echo '!!!!! SETUP START' \
  && sbt ciSetup/test \
  && echo '!!!!! SETUP END' \
- && find /tmp/ideprobe/cache -type f -size -100M -delete || true \
- && rm -rf /tmp/ideprobe-pants-from-src
+ && rm -rf /tmp/ideprobe/cache \
+ && rm -rf /tmp/ideprobe-pants-from-src \
+ && rm -rf /root/.ideprobe-pantsPluginIC
 WORKDIR /root
 RUN rmdir /ideprobe-pants
