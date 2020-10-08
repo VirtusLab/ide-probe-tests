@@ -65,10 +65,27 @@ lazy val pantsProbeDriver = project
     buildInfoPackage := "com.twitter.intellij.pants"
   )
 
+lazy val pluginVersions = project
+  .in(file("plugin-versions"))
+  .disableIdeaPluginDevelopment
+  .settings(
+    name := "plugin-versions"
+  )
+
+lazy val updateChecker = project
+  .in(file("ci/update-checker"))
+  .disableIdeaPluginDevelopment
+  .dependsOn(pantsProbeDriver, pluginVersions)
+  .settings(
+    name := "update-checker",
+    libraryDependencies += "org.jetbrains.intellij" % "plugin-repository-rest-client" % "2.0.15",
+    resolvers += MavenRepository("intellij-plugin-service", "https://dl.bintray.com/jetbrains/intellij-plugin-service")
+  )
+
 lazy val pantsTests = project
   .in(file("tests"))
   .disableIdeaPluginDevelopment
-  .dependsOn(pantsProbeDriver)
+  .dependsOn(pantsProbeDriver, pluginVersions)
   .usesIdeaPlugin(pantsProbePlugin)
   .settings(
     name := "pants-tests",
