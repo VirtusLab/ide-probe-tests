@@ -10,7 +10,7 @@ import org.virtuslab.ideprobe.protocol.ProjectRef
 final class ThriftIdeaPluginTest extends PantsTestSuite with Assertions {
 
   @Test
-  def findThriftFilesPants(): Unit = {
+  def findThriftFiles(): Unit = {
     findThriftFiles(openProjectWithPants)
   }
 

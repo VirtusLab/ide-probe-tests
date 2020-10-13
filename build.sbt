@@ -2,13 +2,14 @@ name := "ideprobe-pants"
 
 organization.in(ThisBuild) := "com.twitter.ideprobe"
 version.in(ThisBuild) := "0.1"
-scalaVersion.in(ThisBuild) := "2.13.1"
-intellijBuild.in(ThisBuild) := "203.4203.26"
+scalaVersion.in(ThisBuild) := "2.12.10"
+intellijBuild.in(ThisBuild) := "202.7319.50"
 resolvers.in(ThisBuild) ++= Dependencies.ideProbe.resolvers
 skip in publish := true
 
 import IdeaPluginAdapter._
 import IdeaPluginDevelopment._
+import sbtbuildinfo.BuildInfoPlugin.autoImport.buildInfoKeys
 
 /**
  * By default, the sbt-idea-plugin gets applied to all of the projects.
@@ -59,7 +60,6 @@ lazy val pantsProbeDriver = project
   .settings(
     name := "pants-probe-driver",
     libraryDependencies += Dependencies.ideProbe.driver,
-    libraryDependencies += Dependencies.ideProbe.robotDriver,
     libraryDependencies += Dependencies.ideProbe.probeScalaDriver,
     buildInfoKeys := Seq[BuildInfoKey](version),
     buildInfoPackage := "com.twitter.intellij.pants"

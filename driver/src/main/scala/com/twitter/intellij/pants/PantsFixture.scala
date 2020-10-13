@@ -4,7 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.virtuslab.ideprobe.Shell
-import org.virtuslab.ideprobe.CommandResult
+import org.virtuslab.ideprobe.Shell.CommandResult
 
 trait PantsFixture {
   def runPants(workspace: Path, command: Seq[String]): CommandResult = {
