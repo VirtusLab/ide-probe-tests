@@ -7,7 +7,7 @@ object Dependencies {
   )
 
   object ideProbe {
-    val version = "0.2.0+4-620aaaa3+20201008-1417-SNAPSHOT"
+    val version = "0.2.0+1-c720d895+20201006-1051-SNAPSHOT"
 
     val resolvers = Seq(
       Resolver.sonatypeRepo("public"),

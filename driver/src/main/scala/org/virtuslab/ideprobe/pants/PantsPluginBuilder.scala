@@ -1,44 +1,56 @@
 package org.virtuslab.ideprobe.pants
 
 import java.io.InputStream
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.UUID
-import org.virtuslab.ideprobe.{Config, Id, Shell, error}
-import org.virtuslab.ideprobe.dependencies.{DependencyBuilder, GitRepository, ResourceProvider}
+
+import org.virtuslab.ideprobe.Id
+import org.virtuslab.ideprobe.Shell
+import org.virtuslab.ideprobe.dependencies.DependencyBuilder
+import org.virtuslab.ideprobe.dependencies.ResourceProvider
+import org.virtuslab.ideprobe.dependencies.SourceRepository
+import org.virtuslab.ideprobe.dependencies.SourceRepository.Git
+import org.virtuslab.ideprobe.error
+import org.virtuslab.ideprobe.util.GitUtils
 import org.virtuslab.ideprobe.Extensions._
 
 object PantsPluginBuilder extends DependencyBuilder(Id("pants")) {
-  def build(config: Config, resources: ResourceProvider): Path = {
-    val repository = config[GitRepository]("repository")
-    val env = config.get[Map[String, String]]("env").getOrElse(Map.empty)
-    val hash = GitRepository.commitHash(repository, "HEAD")
-    val artifact = repository.path.resolveChild(hash)
-    resources.get(artifact, provider = build(repository, env))
-  }
+  def build(repository: SourceRepository, resources: ResourceProvider): Path =
+    repository match {
+      case git: Git =>
+        val hash = GitUtils.hash(git, "HEAD")
+        val artifact = git.path.resolveChild(hash)
 
-  private def build(repository: GitRepository, env: Map[String, String]): InputStream = {
-    val localRepo = GitRepository.clone(repository)
+        resources.get(artifact, provider = build(git))
+    }
 
-    Shell.run(localRepo, env, "./scripts/setup-ci-environment.sh").ok()
+  private def build(repository: Git): InputStream = {
+    val localRepo = GitUtils.clone(repository)
 
-    val deployEnv = env ++ Map("TRAVIS_BRANCH" -> "master")
-    Shell.run(localRepo, deployEnv, "./scripts/deploy/deploy.sh", "--skip-publish").ok()
+    val baseEnv = Map("PANTS_SHA" -> "1.25.x-twtr")
 
-    val files = localRepo.directChildren()
-    val output = files.find(_.name.matches("pants_.*\\.zip")).getOrElse {
+    val setupCiEnvironment = List("./scripts/setup-ci-environment.sh")
+    val result0 = Shell.run(localRepo, baseEnv, setupCiEnvironment: _*)
+    if (result0.exitCode != 0) error(s"Couldn't set up ci environment. STDERR:\n${result0.err}")
+
+    val env = baseEnv ++ Map("TRAVIS_BRANCH" -> "master")
+    val deploy = List("./scripts/deploy/deploy.sh", "--skip-publish")
+    val result = Shell.run(localRepo, env, deploy: _*)
+    if (result.exitCode != 0) error(s"Couldn't build pants plugin. STDERR:\n${result.err}")
+
+    val files = localRepo.toFile.listFiles()
+    val output = files.find(_.getName.matches("pants_.*\\.zip")).getOrElse {
       error(s"Couldn't find pants archive. Existing files:\n${files.mkString("\n")}")
     }
 
-    val pantsPath = Paths.get(sys.props("java.io.tmpdir"), s"pants${UUID.randomUUID()}.zip")
-    output.moveTo(pantsPath)
-    if (pantsPath.isFile) {
+    val pantsPath = Paths.get("/tmp", "pants.zip")
+    output.renameTo(pantsPath.toFile)
+    if (Files.exists(pantsPath)) {
       println(s"Built pants at $pantsPath")
       localRepo.delete()
       pantsPath.inputStream
-    } else {
-      error(s"Could not move $output to $pantsPath")
-    }
+    } else error(s"Could not move $output to $pantsPath")
   }
 
 }
