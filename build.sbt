@@ -60,7 +60,6 @@ lazy val pantsProbeDriver = project
   .settings(
     name := "pants-probe-driver",
     libraryDependencies += Dependencies.ideProbe.driver,
-    libraryDependencies += Dependencies.ideProbe.probeScalaDriver,
     buildInfoKeys := Seq[BuildInfoKey](version),
     buildInfoPackage := "com.twitter.intellij.pants"
   )

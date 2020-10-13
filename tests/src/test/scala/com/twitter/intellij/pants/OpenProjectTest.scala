@@ -7,7 +7,6 @@ import org.junit.Assert.assertEquals
 import org.junit.{Assert, Test}
 import org.virtuslab.ideprobe.junit4.RunningIntelliJPerSuite
 import org.virtuslab.ideprobe.protocol.{FileRef, ModuleRef, ProjectRef, RunFixesSpec, SourceFolder, VcsRoot}
-import org.virtuslab.ideprobe.scala.ScalaPluginExtension
 import org.virtuslab.ideprobe.{ConfigFormat, RunningIntelliJFixture, Shell}
 import pureconfig.ConfigReader
 import pureconfig.generic.semiauto.deriveReader
@@ -140,20 +139,4 @@ object OpenProjectTestPants extends OpenProjectTestFixture {
 
 object OpenProjectTestFastpassWithCmdLine extends OpenProjectTestFixture {
   override def openProject(): ProjectRef = openProjectWithBsp(intelliJ)
-}
-
-object OpenProjectTestFastpassWithWizard extends OpenProjectTestFixture with ScalaPluginExtension {
-  private def targetsFromConfig(intelliJ: RunningIntelliJFixture): Seq[String] =  {
-    intelliJ.config[Seq[String]]("pants.import.targets")
-  }
-
-  override def openProject(): ProjectRef = {
-    val path =  intelliJ.workspace.resolve(targetsFromConfig(intelliJ).head)
-    val project = intelliJ.probe.importBspProject(path)
-    project
-  }
-}
-
-class OpenProjectTestFastpassWithWizard extends OpenProjectTestBspBase {
-  override def intelliJ: RunningIntelliJFixture = OpenProjectTestFastpassWithWizard.intelliJ
 }

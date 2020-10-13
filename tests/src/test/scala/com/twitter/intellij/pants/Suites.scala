@@ -8,7 +8,6 @@ import org.junit.runners.Suite.SuiteClasses
 @SuiteClasses(Array(
   classOf[OpenProjectTestFastpassWithCmdLine],
   classOf[OpenProjectTestPants],
-  classOf[OpenProjectTestFastpassWithWizard],
   classOf[BUILDFilesTest],
   classOf[PantsSettingsTest],
   classOf[ThriftIdeaPluginTest]
