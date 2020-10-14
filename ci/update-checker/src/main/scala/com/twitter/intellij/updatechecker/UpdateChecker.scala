@@ -1,20 +1,20 @@
 package com.twitter.intellij.updatechecker
 
-import java.nio.file.Path
+import java.nio.file.Paths
 
 import org.jetbrains.intellij.pluginRepository._
 import org.jetbrains.intellij.pluginRepository.model.{PluginUpdateBean, ProductFamily}
 import org.virtuslab.ideprobe.Config
 import org.virtuslab.ideprobe.Extensions.PathExtension
-import org.virtuslab.ideprobe.dependencies.Plugin
 import org.virtuslab.ideprobe.dependencies.Plugin.Versioned
 
+import pureconfig.generic.auto._
 import scala.jdk.CollectionConverters._
 
 object UpdateChecker {
 
   // Assuming this program is launched in the project's base directory
-  private val configFile = Path.of("tests/src/test/resources/versions.conf")
+  private val configFile = Paths.get("tests/src/test/resources/versions.conf")
 
   case class PluginUpdate(id: String, version: String)
 
@@ -23,22 +23,22 @@ object UpdateChecker {
   }
   import updateBeanOrdering._
 
-  private def updatedConfig(oldConfig: String, changes: Seq[PluginUpdate]): String = {
-    changes.foldLeft(oldConfig){ case (config, PluginUpdate(id, version)) =>
-      config.replaceFirst(
-        s"""\\{ id = "$id", version = "[a-zA-Z0-9_\\-.]+"""",
-        s"""{ id = "$id", version = "$version""""
-      )
+  private def updatedConfig(oldConfig: VersionsConf, changes: Iterable[PluginUpdate]): VersionsConf = {
+    val newPlugins = oldConfig.plugins.map{
+      case (key, oldPlugin@Versioned(id, _, _)) =>
+        val newVersion = changes.iterator.find(_.id == id).map(_.version)
+        key -> newVersion.fold(oldPlugin)(v => oldPlugin.copy(version = v))
+      case other => other
     }
+    oldConfig.copy(plugins = newPlugins)
   }
 
   def main(args: Array[String]): Unit = {
 
     println(s"Reading the conf file from $configFile")
-    val config = Config.fromFile(configFile)
-    val intellijBuildVersion = config[String]("versions.intellij.build")
-    println(intellijBuildVersion)
-    val currentPlugins = Seq("pythonCommunity", "scala", "pants", "thrift").map(p => config[Plugin](s"versions.plugins.$p"))
+    val config = Config.fromFile(configFile)[VersionsConf]("versions")
+    println(config.intellij)
+    val currentPlugins = config.plugins.values
 
     println()
     println("Versions from the conf file:")
@@ -59,7 +59,7 @@ object UpdateChecker {
 
     def findUpdates(p: Versioned): Option[PluginUpdate] = {
       val updates = pluginManager.searchCompatibleUpdates(
-        java.util.List.of(p.id), intellijBuildVersion, p.channel.getOrElse("")
+        List(p.id).asJava, config.intellij.build, p.channel.getOrElse("")
       ).asScala.toList
       println(s"Updates for ${p.id} ${p.version}: ${updates.size}")
       updates.foreach(u => println("  " + u))
@@ -86,9 +86,8 @@ object UpdateChecker {
       println("Some plugins are outdated!")
       println("Available updates:")
       pluginUpdates.foreach { u => println(s"  ${u.id} : " + u.version) }
-      val oldConfig = configFile.content
-      val updated = updatedConfig(oldConfig, pluginUpdates)
-      configFile.write(updated)
+      val updated = updatedConfig(config, pluginUpdates)
+      configFile.write(VersionsConfFormat.format(updated))
       println(s"Updated the config file at ${configFile}")
     }
   }

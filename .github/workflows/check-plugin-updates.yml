@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  prepare-image:
+  check-for-updates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.0.0
