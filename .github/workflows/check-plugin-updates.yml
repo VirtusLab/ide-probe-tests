@@ -1,6 +1,8 @@
 name: Check for plugin updates
 
 on:
+  push:
+    branches: [master]
   schedule:
     - cron: "* */6 * * *"
   workflow_dispatch:
