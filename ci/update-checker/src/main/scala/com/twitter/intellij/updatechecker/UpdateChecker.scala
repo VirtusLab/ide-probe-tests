@@ -6,10 +6,12 @@ import org.jetbrains.intellij.pluginRepository._
 import org.jetbrains.intellij.pluginRepository.model.{PluginUpdateBean, ProductFamily}
 import org.virtuslab.ideprobe.Config
 import org.virtuslab.ideprobe.Extensions.PathExtension
+import org.virtuslab.ideprobe.dependencies.IntelliJVersion
 import org.virtuslab.ideprobe.dependencies.Plugin.Versioned
-
 import pureconfig.generic.auto._
+
 import scala.jdk.CollectionConverters._
+import scala.math.Ordering.Implicits.seqOrdering
 
 object UpdateChecker {
 
@@ -22,6 +24,8 @@ object UpdateChecker {
     case (x, y) => x.getCdate < y.getCdate
   }
   import updateBeanOrdering._
+
+  private val buildOrdering = Ordering.by[IntelliJVersion, Seq[Int]](_.build.split('.').map(_.toInt))
 
   private def updatedConfig(oldConfig: VersionsConf, changes: Iterable[PluginUpdate]): VersionsConf = {
     val newPlugins = oldConfig.plugins.map{
@@ -36,8 +40,9 @@ object UpdateChecker {
   def main(args: Array[String]): Unit = {
 
     println(s"Reading the conf file from $configFile")
+    println()
     val config = Config.fromFile(configFile)[VersionsConf]("versions")
-    println(config.intellij)
+    println(s"Platform version is ${config.intellij.build}")
     val currentPlugins = config.plugins.values
 
     println()
@@ -48,6 +53,10 @@ object UpdateChecker {
       case other =>
         println(s"  - ${other}")
     }
+
+    println()
+    println("Checking the platform repository for updates...")
+    val intelliJUpdate = PlatformUpdateChecker.latestUpdateVersion()
 
     val pluginRepository = PluginRepositoryFactory.create("https://plugins.jetbrains.com", null)
     val pluginManager = pluginRepository.getPluginManager
@@ -80,14 +89,32 @@ object UpdateChecker {
       case p: Versioned => findUpdates(p)
     }.flatten
 
+    val hasIntelliJUpdate = {
+      import buildOrdering._
+      intelliJUpdate > config.intellij
+    }
+
+    if (hasIntelliJUpdate) {
+      println(s"An IntelliJ platform update is available: ${intelliJUpdate.build}")
+    } else {
+      println("The IntelliJ platform is up to date!")
+    }
+
     if(pluginUpdates.isEmpty) {
       println("All plugins are up to date!")
     } else {
       println("Some plugins are outdated!")
       println("Available updates:")
       pluginUpdates.foreach { u => println(s"  ${u.id} : " + u.version) }
-      val updated = updatedConfig(config, pluginUpdates)
-      configFile.write(VersionsConfFormat.format(updated))
+    }
+
+    val configWithIntelliJ = if(hasIntelliJUpdate) config.copy(intellij = intelliJUpdate) else config
+    val configWithIntelliJAndPlugins =
+      if(pluginUpdates.isEmpty) configWithIntelliJ
+      else updatedConfig(configWithIntelliJ, pluginUpdates)
+
+    if(configWithIntelliJAndPlugins != config) {
+      configFile.write(VersionsConfFormat.format(configWithIntelliJAndPlugins))
       println(s"Updated the config file at ${configFile}")
     }
   }
