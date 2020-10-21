@@ -14,7 +14,7 @@ object PlatformUpdateChecker {
 
   def latestUpdateVersion(): IntelliJVersion = {
     println(s"Looking for snapshots at $snapshotsPage")
-    val doc = Jsoup.connect(snapshotsPage).get
+    val doc = Jsoup.connect(snapshotsPage).get()
 
     val latestSnapshotRows = doc.select(latestIdeaSnapshotSelector).asScala
     println("Latest snapshot properties:")
