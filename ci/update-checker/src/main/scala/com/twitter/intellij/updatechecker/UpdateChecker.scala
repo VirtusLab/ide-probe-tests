@@ -41,7 +41,7 @@ object UpdateChecker {
 
     println(s"Reading the conf file from $configFile")
     println()
-    val config = Config.fromFile(configFile)[VersionsConf]("versions")
+    val config = Config.fromFile(configFile).source.loadOrThrow[VersionsConfFile].versions
     println(s"Platform version is ${config.intellij.build}")
     val currentPlugins = config.plugins.values
 
@@ -49,7 +49,7 @@ object UpdateChecker {
     println("Versions from the conf file:")
     currentPlugins.foreach {
       case Versioned(id, version, channel) =>
-        println(s"  * ${id} ${version} ${channel.getOrElse("")}")
+        println(s"  * $id $version ${channel.getOrElse("")}")
       case other =>
         println(s"  - ${other}")
     }
@@ -100,7 +100,7 @@ object UpdateChecker {
       println("The IntelliJ platform is up to date!")
     }
 
-    if(pluginUpdates.isEmpty) {
+    if (pluginUpdates.isEmpty) {
       println("All plugins are up to date!")
     } else {
       println("Some plugins are outdated!")
@@ -108,13 +108,15 @@ object UpdateChecker {
       pluginUpdates.foreach { u => println(s"  ${u.id} : " + u.version) }
     }
 
-    val configWithIntelliJ = if(hasIntelliJUpdate) config.copy(intellij = intelliJUpdate) else config
+    val configWithIntelliJ =
+      if (hasIntelliJUpdate) config.copy(intellij = intelliJUpdate)
+      else config
     val configWithIntelliJAndPlugins =
-      if(pluginUpdates.isEmpty) configWithIntelliJ
+      if (pluginUpdates.isEmpty) configWithIntelliJ
       else updatedConfig(configWithIntelliJ, pluginUpdates)
 
-    if(configWithIntelliJAndPlugins != config) {
-      configFile.write(VersionsConfFormat.format(configWithIntelliJAndPlugins))
+    if (configWithIntelliJAndPlugins != config) {
+      configFile.write(VersionsConfFormat.format(VersionsConfFile(configWithIntelliJAndPlugins)))
       println(s"Updated the config file at ${configFile}")
     }
   }
