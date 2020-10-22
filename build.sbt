@@ -2,8 +2,8 @@ name := "ideprobe-pants"
 
 organization.in(ThisBuild) := "com.twitter.ideprobe"
 version.in(ThisBuild) := "0.1"
-scalaVersion.in(ThisBuild) := "2.13.1"
-intellijBuild.in(ThisBuild) := "203.4203.26"
+scalaVersion.in(ThisBuild) := "2.12.10"
+intellijBuild.in(ThisBuild) := "202.6948.69"
 resolvers.in(ThisBuild) ++= Dependencies.ideProbe.resolvers
 skip in publish := true
 
@@ -71,6 +71,7 @@ lazy val updateChecker = project
   .dependsOn(pantsProbeDriver)
   .settings(
     name := "update-checker",
+    libraryDependencies += Dependencies.ideProbe.api,
     libraryDependencies += "org.jetbrains.intellij" % "plugin-repository-rest-client" % "2.0.15",
     libraryDependencies += "org.jsoup" % "jsoup" % "1.13.1",
     resolvers += MavenRepository("intellij-plugin-service", "https://dl.bintray.com/jetbrains/intellij-plugin-service")

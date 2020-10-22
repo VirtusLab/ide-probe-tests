@@ -32,7 +32,7 @@ class RunAppTest extends PantsTestSuite with ConfigFormat {
       buildProject(intelliJ)
 
       val runConfig = intelliJ.config[ApplicationRunConfiguration](s"runConfiguration.$configSuffix")
-      val result = intelliJ.probe.run(runConfig)
+      val result = intelliJ.probe.runApp(runConfig)
 
       Assert.assertTrue(result.finishedSuccessfully)
       Assert.assertEquals(intelliJ.config[String]("expectedStdout"), result.stdout)
