@@ -2,8 +2,7 @@ package com.twitter.intellij.updatechecker
 
 import org.jsoup.Jsoup
 import org.virtuslab.ideprobe.dependencies.IntelliJVersion
-
-import scala.jdk.CollectionConverters._
+import org.virtuslab.ideprobe.Extensions._
 
 object PlatformUpdateChecker {
   

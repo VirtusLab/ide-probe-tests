@@ -4,9 +4,7 @@ import org.junit.Assert._
 import org.junit.Test
 import org.virtuslab.ideprobe.ConfigFormat
 import org.virtuslab.ideprobe.RunningIntelliJFixture
-import org.virtuslab.ideprobe.protocol.JUnitRunConfiguration
-import org.virtuslab.ideprobe.protocol.ModuleRef
-import org.virtuslab.ideprobe.protocol.ProjectRef
+import org.virtuslab.ideprobe.protocol.{ModuleRef, ProjectRef, TestScope}
 
 class RunTestsTest extends PantsTestSuite with ConfigFormat {
 
@@ -28,10 +26,10 @@ class RunTestsTest extends PantsTestSuite with ConfigFormat {
       openProject(intelliJ)
       buildProject(intelliJ)
 
-      val runConfiguration = intelliJ.config[JUnitRunConfiguration](s"runConfiguration.$configSuffix")
+      val runConfiguration = intelliJ.config[TestScope.Package](s"runConfiguration.$configSuffix")
       val moduleName = runConfiguration.module.name
 
-      val result = intelliJ.probe.run(runConfiguration)
+      val result = intelliJ.probe.runJUnit(runConfiguration)
       assertTrue(s"There were no suites in $moduleName", result.suites.nonEmpty)
       assertTrue(s"Tests failed in $moduleName with $result", result.isSuccess)
     }

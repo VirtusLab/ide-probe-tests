@@ -71,6 +71,7 @@ lazy val updateChecker = project
   .dependsOn(pantsProbeDriver)
   .settings(
     name := "update-checker",
+    libraryDependencies += Dependencies.ideProbe.api,
     libraryDependencies += "org.jetbrains.intellij" % "plugin-repository-rest-client" % "2.0.15",
     libraryDependencies += "org.jsoup" % "jsoup" % "1.13.1",
     resolvers += MavenRepository("intellij-plugin-service", "https://dl.bintray.com/jetbrains/intellij-plugin-service")

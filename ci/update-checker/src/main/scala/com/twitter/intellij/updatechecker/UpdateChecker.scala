@@ -1,17 +1,15 @@
 package com.twitter.intellij.updatechecker
 
 import java.nio.file.Paths
-
 import org.jetbrains.intellij.pluginRepository._
 import org.jetbrains.intellij.pluginRepository.model.{PluginUpdateBean, ProductFamily}
 import org.virtuslab.ideprobe.Config
 import org.virtuslab.ideprobe.Extensions.PathExtension
 import org.virtuslab.ideprobe.dependencies.IntelliJVersion
 import org.virtuslab.ideprobe.dependencies.Plugin.Versioned
+import org.virtuslab.ideprobe.Extensions._
+import scala.math.Ordering.Implicits._
 import pureconfig.generic.auto._
-
-import scala.jdk.CollectionConverters._
-import scala.math.Ordering.Implicits.seqOrdering
 
 object UpdateChecker {
 
