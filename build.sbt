@@ -2,8 +2,8 @@ name := "ideprobe-pants"
 
 organization.in(ThisBuild) := "com.twitter.ideprobe"
 version.in(ThisBuild) := "0.1"
-scalaVersion.in(ThisBuild) := "2.13.1"
-intellijBuild.in(ThisBuild) := "203.4203.26"
+scalaVersion.in(ThisBuild) := "2.12.10"
+intellijBuild.in(ThisBuild) := "202.7319.50"
 resolvers.in(ThisBuild) ++= Dependencies.ideProbe.resolvers
 skip in publish := true
 
