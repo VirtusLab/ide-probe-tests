@@ -12,6 +12,10 @@ class RunFailedTestsTest extends PantsTestSuite with ConfigFormat {
     runTests("bsp", openProjectWithBsp, _.probe.build().assertSuccess())
   }
 
+  @Test def runTestsWithPants(): Unit = {
+    runTests("pants", openProjectWithPants, _.probe.compileAllTargets().assertSuccess())
+  }
+
   //TODO add a test case for a Pants project (like in RunTestsTest)
 
   private def runTests(
@@ -34,7 +38,7 @@ class RunFailedTestsTest extends PantsTestSuite with ConfigFormat {
       assertEquals("initial test results", Set("Tests failed: 1, passed: 1"), errorsInitial.map(_.content).toSet)
       intelliJ.probe.invokeAction("RerunFailedTests")
       val errorsRerun = intelliJ.probe.errors.filterNot(errorsInitial.contains)
-      assertEquals("number of rerun errors", errorsInitial.size, 2)
+      assertEquals("number of rerun errors", errorsRerun.size, 2)
       assertEquals("rerun results", Set("Tests failed: 1, passed: 0"), errorsRerun.map(_.content).toSet)
     }
   }
