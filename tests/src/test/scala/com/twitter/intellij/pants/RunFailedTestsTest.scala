@@ -4,9 +4,11 @@ import org.junit.Assert._
 import org.junit.Test
 import org.virtuslab.ideprobe.ConfigFormat
 import org.virtuslab.ideprobe.RunningIntelliJFixture
-import org.virtuslab.ideprobe.protocol.{ProjectRef, TestRunConfiguration}
+import org.virtuslab.ideprobe.protocol.ProjectRef
+import org.virtuslab.ideprobe.scala.ScalaPluginExtension
+import org.virtuslab.ideprobe.scala.protocol.ScalaTestRunConfiguration
 
-class RunFailedTestsTest extends PantsTestSuite with ConfigFormat {
+class RunFailedTestsTest extends PantsTestSuite with ConfigFormat with ScalaPluginExtension {
 
   @Test def runTestsWithBsp(): Unit = {
     runTests("bsp", openProjectWithBsp, _.probe.build().assertSuccess())
@@ -24,7 +26,7 @@ class RunFailedTestsTest extends PantsTestSuite with ConfigFormat {
       openProject(intelliJ)
       buildProject(intelliJ)
 
-      val runConfiguration = intelliJ.config[TestRunConfiguration](s"runConfiguration.$configSuffix")
+      val runConfiguration = intelliJ.config[ScalaTestRunConfiguration.Package](s"runConfiguration.$configSuffix")
       val moduleName = runConfiguration.module.name
 
       val result = intelliJ.probe.run(runConfiguration)
