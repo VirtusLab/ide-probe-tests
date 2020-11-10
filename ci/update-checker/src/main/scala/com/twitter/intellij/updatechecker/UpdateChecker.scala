@@ -75,14 +75,18 @@ object UpdateChecker {
       def getUpdateInfo(id: String, version: String) = pluginUpdateManager.getUpdatesByVersionAndFamily(
         id, version, ProductFamily.INTELLIJ
       ).asScala.toList
-      val availableUpdate = updates.head
-      val availableVersion = availableUpdate.getVersion
-      val currentUpdateInfo = getUpdateInfo(p.id, p.version).head
-      val availableUpdateInfo = getUpdateInfo(p.id, availableVersion).head
-      val isNewer = currentUpdateInfo < availableUpdateInfo
-      println((if(isNewer) "!" else " ") + s" ${availableVersion} is ${if(isNewer) "" else "not "}newer than ${currentUpdateInfo.getVersion}")
-      println()
-      if(isNewer) Some(PluginUpdate(p.id, availableVersion)) else None
+      if(updates.isEmpty) {
+        println(s"No updates found for ${p.id} ${p.version}. Something is not right...")
+      }
+      updates.headOption.flatMap { availableUpdate =>
+        val availableVersion = availableUpdate.getVersion
+        val currentUpdateInfo = getUpdateInfo(p.id, p.version).head
+        val availableUpdateInfo = getUpdateInfo(p.id, availableVersion).head
+        val isNewer = currentUpdateInfo < availableUpdateInfo
+        println((if(isNewer) "!" else " ") + s" ${availableVersion} is ${if(isNewer) "" else "not "}newer than ${currentUpdateInfo.getVersion}")
+        println()
+        if(isNewer) Some(PluginUpdate(p.id, availableVersion)) else None
+      }
     }
 
     val pluginUpdates = currentPlugins.collect {
