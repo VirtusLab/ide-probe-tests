@@ -2,11 +2,10 @@ package com.twitter.intellij.pants
 
 import org.junit.Assert._
 import org.junit.Test
-import org.virtuslab.ideprobe.ConfigFormat
-import org.virtuslab.ideprobe.RunningIntelliJFixture
-import org.virtuslab.ideprobe.protocol.{ProjectRef, TestRunConfiguration}
+import org.virtuslab.ideprobe.{ConfigFormat, RunningIntelliJFixture}
+import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
 
-class RunFailedTestsTest extends PantsTestSuite with ConfigFormat {
+class RerunFailedTestsTest extends PantsTestSuite with ConfigFormat {
 
   @Test def runTestsWithBsp(): Unit = {
     runTests("bsp", openProjectWithBsp, _.probe.build().assertSuccess())
@@ -19,15 +18,17 @@ class RunFailedTestsTest extends PantsTestSuite with ConfigFormat {
     openProject: RunningIntelliJFixture => ProjectRef,
     buildProject: RunningIntelliJFixture => Unit
   ): Unit = {
-    import pureconfig.generic.auto._
     fixtureFromConfig().run { intelliJ =>
+      import pureconfig.generic.auto._
+
       openProject(intelliJ)
       buildProject(intelliJ)
 
-      val runConfiguration = intelliJ.config[TestRunConfiguration](s"runConfiguration.$configSuffix")
+      val runConfiguration = intelliJ.config[TestScope.Module](s"runConfiguration.$configSuffix")
+      val runnerName = intelliJ.config.get[String](s"runConfiguration.$configSuffix.runnerName")
       val moduleName = runConfiguration.module.name
 
-      val result = intelliJ.probe.run(runConfiguration)
+      val result = intelliJ.probe.runTestsFromGenerated(runConfiguration, runnerName)
       val errorsInitial = intelliJ.probe.errors
       assertEquals(s"number of test suites in in $moduleName", 1, result.suites.size)
       assertEquals("initial number of errors", errorsInitial.size, 2)

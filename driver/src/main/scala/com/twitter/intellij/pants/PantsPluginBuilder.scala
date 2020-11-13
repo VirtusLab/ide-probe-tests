@@ -1,12 +1,11 @@
-package org.virtuslab.ideprobe.pants
+package com.twitter.intellij.pants
 
 import java.io.InputStream
-import java.nio.file.Path
-import java.nio.file.Paths
+import java.nio.file.{Path, Paths}
 import java.util.UUID
-import org.virtuslab.ideprobe.{Config, Id, Shell, error}
-import org.virtuslab.ideprobe.dependencies.{DependencyBuilder, GitRepository, ResourceProvider}
 import org.virtuslab.ideprobe.Extensions._
+import org.virtuslab.ideprobe.dependencies.{DependencyBuilder, GitRepository, ResourceProvider}
+import org.virtuslab.ideprobe.{Config, Id, Shell, error}
 
 object PantsPluginBuilder extends DependencyBuilder(Id("pants")) {
   def build(config: Config, resources: ResourceProvider): Path = {

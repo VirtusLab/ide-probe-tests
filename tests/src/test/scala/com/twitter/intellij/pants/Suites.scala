@@ -20,6 +20,13 @@ class Suite1
 @SuiteClasses(Array(
   classOf[RunAppTest],
   classOf[RunTestsTest],
-  classOf[RunFailedTestsTest]
+  classOf[RerunFailedTestsTest]
 ))
 class Suite2
+
+
+@RunWith(classOf[Suite])
+@SuiteClasses(Array(
+  classOf[ProjectOpenBenchmark]
+))
+class Suite3
