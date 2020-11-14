@@ -39,64 +39,61 @@ object UpdateChecker {
 
   def main(args: Array[String]): Unit = {
 
-    println(s"Reading the conf file from $configFile")
-    println()
     val config = Config.fromFile(configFile).source.loadOrThrow[VersionsConfFile].versions
-    println(s"Platform version is ${config.intellij.build}")
     val currentPlugins = config.plugins.values
 
     println()
-    println("Versions from the conf file:")
+    println(s"Versions from the conf file (${configFile}):")
+    println(s"  * IntelliJ platform: ${config.intellij.build}")
     currentPlugins.foreach {
       case Versioned(id, version, channel) =>
-        println(s"  * $id $version ${channel.getOrElse("")}")
+        println(s"   * $id $version ${channel.getOrElse("")}")
       case other =>
-        println(s"  - ${other}")
+        println(s"   - ${other}")
     }
 
-    println()
-    println("Checking the platform repository for updates...")
     val intelliJUpdate = PlatformUpdateChecker.latestUpdateVersion()
 
     val pluginRepository = PluginRepositoryFactory.create("https://plugins.jetbrains.com", null)
     val pluginManager = pluginRepository.getPluginManager
     val pluginUpdateManager = pluginRepository.getPluginUpdateManager
 
-    println()
-    println("Checking the plugin repository for updates...")
-    println()
+    val hasIntelliJUpdate = {
+      import buildOrdering._
+      intelliJUpdate > config.intellij
+    }
+
+    val targetIntelliJ = if(hasIntelliJUpdate) intelliJUpdate.build else config.intellij.build
 
     def findUpdates(p: Versioned): Option[PluginUpdate] = {
       val updates = pluginManager.searchCompatibleUpdates(
-        List(p.id).asJava, config.intellij.build, p.channel.getOrElse("")
+        List(p.id).asJava, targetIntelliJ, p.channel.getOrElse("")
       ).asScala.toList
       println(s"Updates for ${p.id} ${p.version}: ${updates.size}")
-      updates.foreach(u => println("  " + u))
       def getUpdateInfo(id: String, version: String) = pluginUpdateManager.getUpdatesByVersionAndFamily(
         id, version, ProductFamily.INTELLIJ
       ).asScala.toList
       if(updates.isEmpty) {
-        println(s"No updates found for ${p.id} ${p.version}. Something is not right...")
+        println(s"! No updates found for ${p.id} ${p.version}. Something is not right...")
       }
       updates.headOption.flatMap { availableUpdate =>
         val availableVersion = availableUpdate.getVersion
         val currentUpdateInfo = getUpdateInfo(p.id, p.version).head
         val availableUpdateInfo = getUpdateInfo(p.id, availableVersion).head
         val isNewer = currentUpdateInfo < availableUpdateInfo
-        println((if(isNewer) "!" else " ") + s" ${availableVersion} is ${if(isNewer) "" else "not "}newer than ${currentUpdateInfo.getVersion}")
-        println()
+        println((if(isNewer) " !" else "  ") + s" ${p.id} ${availableVersion} is ${if(isNewer) "" else "not "}newer than ${currentUpdateInfo.getVersion}")
         if(isNewer) Some(PluginUpdate(p.id, availableVersion)) else None
       }
     }
 
+    println()
+    println(s"Checking the plugin repository for updates compatible with IntelliJ ${targetIntelliJ}...")
+    println()
+
     val pluginUpdates = currentPlugins.collect {
       case p: Versioned => findUpdates(p)
     }.flatten
-
-    val hasIntelliJUpdate = {
-      import buildOrdering._
-      intelliJUpdate > config.intellij
-    }
+    println()
 
     if (hasIntelliJUpdate) {
       println(s"An IntelliJ platform update is available: ${intelliJUpdate.build}")
@@ -107,8 +104,7 @@ object UpdateChecker {
     if (pluginUpdates.isEmpty) {
       println("All plugins are up to date!")
     } else {
-      println("Some plugins are outdated!")
-      println("Available updates:")
+      println("New plugin versions are available:")
       pluginUpdates.foreach { u => println(s"  ${u.id} : " + u.version) }
     }
 
