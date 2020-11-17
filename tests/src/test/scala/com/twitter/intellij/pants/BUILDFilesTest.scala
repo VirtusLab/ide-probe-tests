@@ -1,12 +1,13 @@
 package com.twitter.intellij.pants
 
-import org.junit.Assert.assertEquals
+import java.nio.file.Paths
 import org.junit.Test
 import org.virtuslab.ideprobe.Assertions
 import org.virtuslab.ideprobe.RunningIntelliJFixture
 import org.virtuslab.ideprobe.protocol.FileRef
 import org.virtuslab.ideprobe.protocol.ProjectRef
 import org.virtuslab.ideprobe.protocol.Reference
+import org.virtuslab.ideprobe.Extensions._
 
 final class BUILDFilesTest extends PantsTestSuite with Assertions {
 
@@ -21,22 +22,22 @@ final class BUILDFilesTest extends PantsTestSuite with Assertions {
   }
 
   def checkReferencesToOtherBUILDFiles(openProject: RunningIntelliJFixture => ProjectRef): Unit = {
-    fixtureFromConfig().run { intellij =>
-      val project = openProject(intellij)
+    fixtureFromConfig().run { intelliJ =>
+      val project = openProject(intelliJ)
 
-      def file(name: String): FileRef = FileRef(intellij.workspace.resolve(name), project)
+      def buildFile(name: String): FileRef = {
+        FileRef(intelliJ.workspace.resolve(name).resolve("BUILD"), project)
+      }
 
-      val thriftLibBuild = file("thrift-lib/BUILD")
-      val thirdPartyBuild = file("3rdParty/BUILD")
-      val javaAppBuild = file("java-app/BUILD")
+      val dirWithBuildFileContainingRefs = intelliJ.config[String]("buildFiles.withReferences")
+      val dirsWithReferencedBuildFiles = intelliJ.config[Seq[String]]("buildFiles.referenced")
 
-      val refs = intellij.probe.fileReferences(javaAppBuild)
+      val references = intelliJ.probe.fileReferences(buildFile(dirWithBuildFileContainingRefs))
+      val expectedReferences = dirsWithReferencedBuildFiles.map { dir =>
+        Reference(Paths.get(dir).name, Reference.Target.File(buildFile(dir)))
+      }
 
-      assertEquals(2, refs.size)
-      assertContains(refs)(
-        Reference("3rdParty", Reference.Target.File(thirdPartyBuild)),
-        Reference("thrift-lib", Reference.Target.File(thriftLibBuild))
-      )
+      assertContains(references)(expectedReferences: _*)
     }
   }
 

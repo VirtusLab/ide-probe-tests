@@ -11,7 +11,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        suite-name: ["com.twitter.intellij.pants.Suite1", "com.twitter.intellij.pants.Suite2"]
+        suite-name: [
+            "com.twitter.intellij.pants.Suite1",
+            "com.twitter.intellij.pants.Suite2",
+            "com.twitter.intellij.pants.Suite3"]
         os: [ubuntu-latest]
       fail-fast: false
     steps:
@@ -19,7 +22,6 @@ jobs:
       - name: Remove redundant packages
         run: |
           df -h
-          #TODO find out the packages that own these files and uninstall them properly
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /usr/share/swift
           sudo rm -rf /usr/local/lib/android

@@ -10,8 +10,8 @@ import org.virtuslab.ideprobe.dependencies.IntelliJVersion
 import org.virtuslab.ideprobe.dependencies.Plugin.Versioned
 import pureconfig.generic.auto._
 
-import scala.jdk.CollectionConverters._
-import scala.math.Ordering.Implicits.seqOrdering
+import scala.collection.JavaConverters._
+import scala.math.Ordering.Implicits._
 
 object UpdateChecker {
 

@@ -16,7 +16,7 @@ class PantsSettingsTest extends PantsTestSuite {
         )
 
       val projectRoot = intelliJ.workspace.resolve(intelliJ.config[String]("targetPath"))
-      val project = intelliJ.probe.importProject(projectRoot, importSettings)
+      intelliJ.probe.importProject(projectRoot, importSettings)
 
       val initialSettings = intelliJ.probe.getPantsProjectSettings()
 

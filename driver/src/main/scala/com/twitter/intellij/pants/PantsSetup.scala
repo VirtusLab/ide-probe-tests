@@ -64,7 +64,7 @@ object PantsSetup extends ConfigFormat {
     val pantsScriptPath = targetPath.resolve("pants")
     val originalPants = findPants(workspace, workspace)
     originalPants.write(s"""#!/usr/bin/env bash
-                          |${pantsScriptPath.toAbsolutePath} $$*
+                          |${pantsScriptPath.toAbsolutePath} "$$@"
                           |""".stripMargin)
   }
 

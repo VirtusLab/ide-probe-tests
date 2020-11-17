@@ -148,7 +148,7 @@ object OpenProjectTestFastpassWithWizard extends OpenProjectTestFixture with Sca
   }
 
   override def openProject(): ProjectRef = {
-    val path =  intelliJ.workspace.resolve(targetsFromConfig(intelliJ).head)
+    val path =  intelliJ.workspace.resolve(targetsFromConfig(intelliJ).head.stripSuffix("::"))
     val project = intelliJ.probe.importBspProject(path)
     project
   }

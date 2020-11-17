@@ -3,9 +3,7 @@ package com.twitter.intellij.pants
 import org.junit.Assert
 import org.junit.Test
 import org.virtuslab.ideprobe.ConfigFormat
-import org.virtuslab.ideprobe.Extensions._
 import org.virtuslab.ideprobe.RunningIntelliJFixture
-import org.virtuslab.ideprobe.ide.intellij.IntelliJPaths
 import org.virtuslab.ideprobe.protocol.ApplicationRunConfiguration
 import org.virtuslab.ideprobe.protocol.ProjectRef
 
@@ -32,10 +30,15 @@ class RunAppTest extends PantsTestSuite with ConfigFormat {
       buildProject(intelliJ)
 
       val runConfig = intelliJ.config[ApplicationRunConfiguration](s"runConfiguration.$configSuffix")
-      val result = intelliJ.probe.run(runConfig)
+      val result = intelliJ.probe.runApp(runConfig)
 
-      Assert.assertTrue(result.finishedSuccessfully)
-      Assert.assertEquals(intelliJ.config[String]("expectedStdout"), result.stdout)
+      val expectedExitCode = intelliJ.config[Int]("expectedExitCode")
+      val expectedOutput = intelliJ.config[String]("expectedStdout")
+      val expectedErrOutput = intelliJ.config[String]("expectedStderr")
+
+      Assert.assertEquals(expectedExitCode, result.exitCode)
+      Assert.assertTrue(s"Unexpected error output: ${result.stderr}", result.stderr.contains(expectedErrOutput))
+      Assert.assertTrue(s"Unexpected output: ${result.stdout}", result.stdout.contains(expectedOutput))
     }
   }
 
