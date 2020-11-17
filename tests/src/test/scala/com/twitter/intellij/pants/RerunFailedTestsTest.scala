@@ -14,7 +14,7 @@ class RerunFailedTestsTest extends PantsTestSuite with ConfigFormat {
   //TODO add a test case for a Pants project (like in RunTestsTest)
 
   private def runTests(
-    configSuffix: String,
+    configPrefix: String,
     openProject: RunningIntelliJFixture => ProjectRef,
     buildProject: RunningIntelliJFixture => Unit
   ): Unit = {
@@ -24,8 +24,8 @@ class RerunFailedTestsTest extends PantsTestSuite with ConfigFormat {
       openProject(intelliJ)
       buildProject(intelliJ)
 
-      val runConfiguration = intelliJ.config[TestScope.Module](s"runConfiguration.$configSuffix")
-      val runnerName = intelliJ.config.get[String](s"runConfiguration.$configSuffix.runnerName")
+      val runConfiguration = intelliJ.config[TestScope.Module](s"$configPrefix.runConfiguration")
+      val runnerName = intelliJ.config.get[String](s"$configPrefix.runnerName")
       val moduleName = runConfiguration.module.name
 
       val result = intelliJ.probe.runTestsFromGenerated(runConfiguration, runnerName)
