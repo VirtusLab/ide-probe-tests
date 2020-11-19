@@ -21,3 +21,4 @@ jobs:
           commit-message: Automatic update of the plugin versions
           labels: automatic
           branch: automatic-plugins-update
+          token: ${{ secrets.BOT_ACCESS_TOKEN }}
