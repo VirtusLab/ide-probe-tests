@@ -117,7 +117,7 @@ object UpdateChecker {
 
     if (configWithIntelliJAndPlugins != config) {
       configFile.write(VersionsConfFormat.format(VersionsConfFile(configWithIntelliJAndPlugins)))
-      println(s"Updated the config file at ${configFile}")
+      PullRequestDescription.setPrBody(if(hasIntelliJUpdate) Some(intelliJUpdate) else None, pluginUpdates)
     }
   }
 

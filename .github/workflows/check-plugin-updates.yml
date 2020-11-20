@@ -11,13 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2.0.0
       - name: Check for updates
+        id: check-for-updates
         run: |
           sbt updateChecker/run
       - name: Create a pull request
         uses: peter-evans/create-pull-request@v3
         with:
           title: Automatic update of the plugin versions
-          body: This pull request was automatically opened, because updated versions of the plugin dependencies became available.
+          body: ${{ steps.check-for-updates.outputs.pr-body }}
           commit-message: Automatic update of the plugin versions
           labels: automatic
           branch: automatic-plugins-update
