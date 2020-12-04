@@ -27,11 +27,13 @@ trait BspFixture {
       "create",
       "--no-bloop-exit",
       "--intellij",
-      "--intellijLauncher", "echo"
+      "--intellijLauncher",
+      "echo"
     ) ++ targets
     val result = runFastpass(config, workspace, command)
     if (result.isFailed) {
-      val needRecreate = """can't create project named '(.*)' because it already exists.""".r.unanchored
+      val needRecreate =
+        """can't create project named '(.*)' because it already exists.""".r.unanchored
       result.err match {
         case needRecreate(name) =>
           workspace.resolveSibling("bsp-projects").resolve(name).delete()
@@ -50,9 +52,11 @@ trait BspFixture {
       coursierPath.toString,
       "launch",
       s"org.scalameta:fastpass_2.12:$fastpassVersion",
-      "-r", "sonatype:snapshots",
+      "-r",
+      "sonatype:snapshots",
       "--quiet",
-      "--main", "scala.meta.fastpass.Fastpass",
+      "--main",
+      "scala.meta.fastpass.Fastpass",
       "--"
     ) ++ args
     Shell.run(workspace, command: _*)

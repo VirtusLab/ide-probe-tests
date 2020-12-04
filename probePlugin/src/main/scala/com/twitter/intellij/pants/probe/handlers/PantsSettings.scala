@@ -23,14 +23,18 @@ object PantsSettings {
     protocol.PantsProjectSettings(
       selectedTargets = linked.flatMap(_.getSelectedTargetSpecs.asScala).toSeq,
       loadSourcesAndDocsForLibs = linked.exists(_.libsWithSources),
-      incrementalProjectImportDepth = linked.map(_.incrementalImportDepth().asScala).reduce(_ orElse _).map(_.toInt),
+      incrementalProjectImportDepth =
+        linked.map(_.incrementalImportDepth().asScala).reduce(_ orElse _).map(_.toInt),
       useIdeaProjectJdk = pantsSettings.isUseIdeaProjectJdk,
       importSourceDepsAsJars = linked.exists(_.importSourceDepsAsJars),
       useIntellijCompiler = linked.exists(_.useIntellijCompiler)
     )
   }
 
-  def changeProjectSettings(ref: ProjectRef, toSet: protocol.PantsProjectSettingsChangeRequest): Unit =
+  def changeProjectSettings(
+    ref: ProjectRef,
+    toSet: protocol.PantsProjectSettingsChangeRequest
+  ): Unit =
     BackgroundTasks.withAwaitNone {
       val project = Projects.resolve(ref)
       val pantsSettings = getPantsSettings(project)
@@ -44,7 +48,8 @@ object PantsSettings {
       }
 
       setSetting(toSet.useIdeaProjectJdk)(_.setUseIdeaProjectJdk(_))
-      setSetting(toSet.incrementalProjectImportDepth)((settings, value) => settings.setEnableIncrementalImport(value.map(Integer.valueOf).asJava))
+      setSetting(toSet.incrementalProjectImportDepth)((settings, value) =>
+        settings.setEnableIncrementalImport(value.map(Integer.valueOf).asJava))
       setLinkedSetting(toSet.useIntellijCompiler)(_.useIntellijCompiler = _)
       setLinkedSetting(toSet.importSourceDepsAsJars)(_.importSourceDepsAsJars = _)
       setLinkedSetting(toSet.loadSourcesAndDocsForLibs)(_.libsWithSources = _)
@@ -52,7 +57,8 @@ object PantsSettings {
     }
 
   private def getPantsSettings(project: Project) = {
-    ExternalSystemApiUtil.getSettings(project, PantsConstants.SYSTEM_ID).asInstanceOf[PantsSettingsFromPlugin]
+    ExternalSystemApiUtil
+      .getSettings(project, PantsConstants.SYSTEM_ID).asInstanceOf[PantsSettingsFromPlugin]
   }
 
   private implicit class OptionalOps[A <: AnyRef](o: Optional[A]) {

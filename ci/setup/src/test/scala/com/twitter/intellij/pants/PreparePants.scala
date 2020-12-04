@@ -13,7 +13,8 @@ class PreparePants extends PantsTestSuite {
     val pantsPluginRepository = "https://github.com/pantsbuild/intellij-pants-plugin"
     val repository = GitRepository(new URI(pantsPluginRepository), ref = None)
     val config = toBuildConfig(repository)
-    val fixture = IntelliJFixture.fromConfig(Config.fromClasspath("pants.conf"))
+    val fixture = IntelliJFixture
+      .fromConfig(Config.fromClasspath("pants.conf"))
       .withPlugin(Plugin.FromSources(Id("pants"), config))
     val workspace = fixture.setupWorkspace()
     val intellij = fixture.installIntelliJ()

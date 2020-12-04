@@ -6,11 +6,12 @@ import org.virtuslab.ideprobe.dependencies.IntelliJVersion
 import scala.collection.JavaConverters._
 
 object PlatformUpdateChecker {
-  
+
   private val snapshotsPage = "https://www.jetbrains.com/intellij-repository/snapshots"
 
   // See https://jsoup.org/cookbook/extracting-data/selector-syntax for explanation
-  private val latestIdeaSnapshotSelector = "h2:containsOwn(com.jetbrains.intellij.idea) + table > tbody > tr:eq(1) > td:lt(3)"
+  private val latestIdeaSnapshotSelector =
+    "h2:containsOwn(com.jetbrains.intellij.idea) + table > tbody > tr:eq(1) > td:lt(3)"
 
   def latestUpdateVersion(): IntelliJVersion = {
     println()

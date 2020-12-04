@@ -11,7 +11,9 @@ object Dependencies {
     val resolvers = Seq(
       Resolver.sonatypeRepo("public"),
       Resolver.sonatypeRepo("snapshots"),
-      MavenRepository("jetbrains-3rd", "https://jetbrains.bintray.com/intellij-third-party-dependencies")
+      MavenRepository(
+        "jetbrains-3rd",
+        "https://jetbrains.bintray.com/intellij-third-party-dependencies")
     )
 
     def apply(name: String): ModuleID = {

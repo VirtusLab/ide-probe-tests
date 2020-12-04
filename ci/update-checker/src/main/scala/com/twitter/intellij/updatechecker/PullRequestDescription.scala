@@ -15,7 +15,7 @@ object PullRequestDescription {
     val header = "This pull request was automatically opened, because updated versions " +
       "of dependencies became available at the Jetbrains Marketplace."
 
-    val lines = Seq(header) ++ intelliJ.map{
+    val lines = Seq(header) ++ intelliJ.map {
       case IntelliJVersion(build, _) => s"* IntelliJ $build"
     } ++ plugins.map {
       case PluginUpdate(id, version) => s"* $id $version"

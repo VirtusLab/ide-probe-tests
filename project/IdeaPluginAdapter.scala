@@ -14,7 +14,8 @@ object IdeaPluginAdapter {
     def usesIdeaPlugin(plugin: Project): Project = {
       project
         .dependsOn(Project.classpathDependency(plugin))
-        .settings(Compile / resourceGenerators += (plugin / packageArtifactZip).map(List(_)).taskValue)
+        .settings(
+          Compile / resourceGenerators += (plugin / packageArtifactZip).map(List(_)).taskValue)
     }
 
     def enableIdeaPluginDevelopment: Project = {

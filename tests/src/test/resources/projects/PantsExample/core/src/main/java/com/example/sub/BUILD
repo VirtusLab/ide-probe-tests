@@ -1,1 +1,1 @@
-java_library(sources = ['*.java'])
+java_library(sources = ["*.java"])

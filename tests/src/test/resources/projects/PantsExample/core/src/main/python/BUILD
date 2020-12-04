@@ -1,3 +1,3 @@
 python_binary(
-    source = "main.py"
+    source = "main.py",
 )

@@ -13,7 +13,8 @@ class ProjectOpenBenchmark extends PantsTestSuite {
   private def benchmark(configPrefix: String, openProject: RunningIntelliJFixture => Unit): Unit = {
     val fixture = fixtureFromConfig()
     val expectedDuration = fixture.config[Duration](s"$configPrefix.benchmark.expectedDuration")
-    val maxDuration = fixture.config.get[Duration](s"$configPrefix.benchmark.maxDuration").getOrElse(expectedDuration * 2)
+    val maxDuration = fixture.config
+      .get[Duration](s"$configPrefix.benchmark.maxDuration").getOrElse(expectedDuration * 2)
     Benchmarks.withRunningIntelliJ(expectedDuration, maxDuration, fixture) { intelliJ =>
       openProject(intelliJ)
     }

@@ -6,7 +6,14 @@ import java.nio.file.Path
 import org.junit.Assert.assertEquals
 import org.junit.{Assert, Test}
 import org.virtuslab.ideprobe.junit4.RunningIntelliJPerSuite
-import org.virtuslab.ideprobe.protocol.{FileRef, ModuleRef, ProjectRef, RunFixesSpec, SourceFolder, VcsRoot}
+import org.virtuslab.ideprobe.protocol.{
+  FileRef,
+  ModuleRef,
+  ProjectRef,
+  RunFixesSpec,
+  SourceFolder,
+  VcsRoot
+}
 import org.virtuslab.ideprobe.scala.ScalaPluginExtension
 import org.virtuslab.ideprobe.{ConfigFormat, RunningIntelliJFixture, Shell}
 import pureconfig.ConfigReader
@@ -77,13 +84,17 @@ abstract class CommonOpenProjectTests {
   }
 
   @Test def hasExpectedModules(): Unit = {
-    def relative(absolutePath: Path): Path = intelliJ.workspace.toRealPath().relativize(absolutePath)
+    def relative(absolutePath: Path): Path =
+      intelliJ.workspace.toRealPath().relativize(absolutePath)
 
     val projectModel = intelliJ.probe.projectModel()
 
     val expectedModules = intelliJ.config[Seq[TestData.Module]]("project.modules")
     val importedModules = projectModel.modules.map { module =>
-      TestData.Module(module.name, module.contentRoots.all.map(sf => TestData.SourceRoot(relative(sf.path), sf.kind, sf.packagePrefix)))
+      TestData.Module(
+        module.name,
+        module.contentRoots.all.map(sf =>
+          TestData.SourceRoot(relative(sf.path), sf.kind, sf.packagePrefix)))
     }
 
     Assert.assertTrue(
@@ -98,7 +109,8 @@ abstract class CommonOpenProjectTests {
 
   @Test def hasModuleSdksSet(): Unit = {
     val project = intelliJ.probe.projectModel()
-    val expectedModulesWithSdk = intelliJ.config[Seq[TestData.Module]]("project.modules").map(_.name)
+    val expectedModulesWithSdk =
+      intelliJ.config[Seq[TestData.Module]]("project.modules").map(_.name)
 
     val modulesWithoutSdk = project.modules
       .filter(module => module.kind.isDefined && expectedModulesWithSdk.contains(module.name))
@@ -143,12 +155,12 @@ object OpenProjectTestFastpassWithCmdLine extends OpenProjectTestFixture {
 }
 
 object OpenProjectTestFastpassWithWizard extends OpenProjectTestFixture with ScalaPluginExtension {
-  private def targetsFromConfig(intelliJ: RunningIntelliJFixture): Seq[String] =  {
+  private def targetsFromConfig(intelliJ: RunningIntelliJFixture): Seq[String] = {
     intelliJ.config[Seq[String]]("pants.import.targets")
   }
 
   override def openProject(): ProjectRef = {
-    val path =  intelliJ.workspace.resolve(targetsFromConfig(intelliJ).head.stripSuffix("::"))
+    val path = intelliJ.workspace.resolve(targetsFromConfig(intelliJ).head.stripSuffix("::"))
     val project = intelliJ.probe.importBspProject(path)
     project
   }

@@ -9,9 +9,11 @@ import org.virtuslab.ideprobe.protocol.ModuleRef
 import pureconfig.generic.auto._
 
 object PantsEndpoints {
-  val ImportPantsProject = Request[(Path, PantsProjectSettingsChangeRequest), ProjectRef]("pants/project/import")
+  val ImportPantsProject =
+    Request[(Path, PantsProjectSettingsChangeRequest), ProjectRef]("pants/project/import")
 
-  val GetPantsProjectSettings = Request[ProjectRef, PantsProjectSettings]("pants/project/settings/get")
+  val GetPantsProjectSettings =
+    Request[ProjectRef, PantsProjectSettings]("pants/project/settings/get")
 
   val ChangePantsProjectSettings =
     Request[(ProjectRef, PantsProjectSettingsChangeRequest), Unit]("pants/project/settings/change")
