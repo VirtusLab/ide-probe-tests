@@ -29,7 +29,8 @@ class RunAppTest extends PantsTestSuite with ConfigFormat {
       openProject(intelliJ)
       buildProject(intelliJ)
 
-      val runConfig = intelliJ.config[ApplicationRunConfiguration](s"runConfiguration.$configSuffix")
+      val runConfig =
+        intelliJ.config[ApplicationRunConfiguration](s"runConfiguration.$configSuffix")
       val result = intelliJ.probe.runApp(runConfig)
 
       val expectedExitCode = intelliJ.config[Int]("expectedExitCode")
@@ -37,8 +38,12 @@ class RunAppTest extends PantsTestSuite with ConfigFormat {
       val expectedErrOutput = intelliJ.config[String]("expectedStderr")
 
       Assert.assertEquals(expectedExitCode, result.exitCode)
-      Assert.assertTrue(s"Unexpected error output: ${result.stderr}", result.stderr.contains(expectedErrOutput))
-      Assert.assertTrue(s"Unexpected output: ${result.stdout}", result.stdout.contains(expectedOutput))
+      Assert.assertTrue(
+        s"Unexpected error output: ${result.stderr}",
+        result.stderr.contains(expectedErrOutput))
+      Assert.assertTrue(
+        s"Unexpected output: ${result.stdout}",
+        result.stdout.contains(expectedOutput))
     }
   }
 

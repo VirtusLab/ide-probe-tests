@@ -25,11 +25,15 @@ object UpdateChecker {
   }
   import updateBeanOrdering._
 
-  private val buildOrdering = Ordering.by[IntelliJVersion, Seq[Int]](_.build.split('.').map(_.toInt))
+  private val buildOrdering =
+    Ordering.by[IntelliJVersion, Seq[Int]](_.build.split('.').map(_.toInt))
 
-  private def updatedConfig(oldConfig: VersionsConf, changes: Iterable[PluginUpdate]): VersionsConf = {
-    val newPlugins = oldConfig.plugins.map{
-      case (key, oldPlugin@Versioned(id, _, _)) =>
+  private def updatedConfig(
+    oldConfig: VersionsConf,
+    changes: Iterable[PluginUpdate]
+  ): VersionsConf = {
+    val newPlugins = oldConfig.plugins.map {
+      case (key, oldPlugin @ Versioned(id, _, _)) =>
         val newVersion = changes.iterator.find(_.id == id).map(_.version)
         key -> newVersion.fold(oldPlugin)(v => oldPlugin.copy(version = v))
       case other => other
@@ -63,17 +67,23 @@ object UpdateChecker {
       intelliJUpdate > config.intellij
     }
 
-    val targetIntelliJ = if(hasIntelliJUpdate) intelliJUpdate.build else config.intellij.build
+    val targetIntelliJ = if (hasIntelliJUpdate) intelliJUpdate.build else config.intellij.build
 
     def findUpdates(p: Versioned): Option[PluginUpdate] = {
-      val updates = pluginManager.searchCompatibleUpdates(
-        List(p.id).asJava, targetIntelliJ, p.channel.getOrElse("")
-      ).asScala.toList
+      val updates = pluginManager
+        .searchCompatibleUpdates(
+          List(p.id).asJava,
+          targetIntelliJ,
+          p.channel.getOrElse("")
+        ).asScala.toList
       println(s"Updates for ${p.id} ${p.version}: ${updates.size}")
-      def getUpdateInfo(id: String, version: String) = pluginUpdateManager.getUpdatesByVersionAndFamily(
-        id, version, ProductFamily.INTELLIJ
-      ).asScala.toList
-      if(updates.isEmpty) {
+      def getUpdateInfo(id: String, version: String) = pluginUpdateManager
+        .getUpdatesByVersionAndFamily(
+          id,
+          version,
+          ProductFamily.INTELLIJ
+        ).asScala.toList
+      if (updates.isEmpty) {
         println(s"! No updates found for ${p.id} ${p.version}. Something is not right...")
       }
       updates.headOption.flatMap { availableUpdate =>
@@ -81,13 +91,15 @@ object UpdateChecker {
         val currentUpdateInfo = getUpdateInfo(p.id, p.version).head
         val availableUpdateInfo = getUpdateInfo(p.id, availableVersion).head
         val isNewer = currentUpdateInfo < availableUpdateInfo
-        println((if(isNewer) " !" else "  ") + s" ${p.id} ${availableVersion} is ${if(isNewer) "" else "not "}newer than ${currentUpdateInfo.getVersion}")
-        if(isNewer) Some(PluginUpdate(p.id, availableVersion)) else None
+        println((if (isNewer) " !" else "  ") + s" ${p.id} ${availableVersion} is ${if (isNewer) ""
+        else "not "}newer than ${currentUpdateInfo.getVersion}")
+        if (isNewer) Some(PluginUpdate(p.id, availableVersion)) else None
       }
     }
 
     println()
-    println(s"Checking the plugin repository for updates compatible with IntelliJ ${targetIntelliJ}...")
+    println(
+      s"Checking the plugin repository for updates compatible with IntelliJ ${targetIntelliJ}...")
     println()
 
     val pluginUpdates = currentPlugins.collect {
@@ -117,7 +129,9 @@ object UpdateChecker {
 
     if (configWithIntelliJAndPlugins != config) {
       configFile.write(VersionsConfFormat.format(VersionsConfFile(configWithIntelliJAndPlugins)))
-      PullRequestDescription.setPrBody(if(hasIntelliJUpdate) Some(intelliJUpdate) else None, pluginUpdates)
+      PullRequestDescription.setPrBody(
+        if (hasIntelliJUpdate) Some(intelliJUpdate) else None,
+        pluginUpdates)
     }
   }
 

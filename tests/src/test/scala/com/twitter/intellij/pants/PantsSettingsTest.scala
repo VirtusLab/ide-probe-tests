@@ -20,7 +20,9 @@ class PantsSettingsTest extends PantsTestSuite {
 
       val initialSettings = intelliJ.probe.getPantsProjectSettings()
 
-      assertTrue("'Load sources and docs for libs' was not set", initialSettings.loadSourcesAndDocsForLibs)
+      assertTrue(
+        "'Load sources and docs for libs' was not set",
+        initialSettings.loadSourcesAndDocsForLibs)
       assertTrue("'Use IntelliJ compiler' was not set", initialSettings.useIntellijCompiler)
 
       intelliJ.probe.setPantsProjectSettings(
@@ -28,7 +30,9 @@ class PantsSettingsTest extends PantsTestSuite {
       )
 
       val finalSettings = intelliJ.probe.getPantsProjectSettings()
-      assertFalse("'Load sources and docs for libs' was not unset", finalSettings.useIntellijCompiler)
+      assertFalse(
+        "'Load sources and docs for libs' was not unset",
+        finalSettings.useIntellijCompiler)
     }
   }
 

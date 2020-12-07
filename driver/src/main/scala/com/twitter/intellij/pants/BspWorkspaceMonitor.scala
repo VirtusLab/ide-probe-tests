@@ -23,8 +23,9 @@ object BspWorkspaceMonitor {
   }
 
   def cleanup(): Unit = {
-    initialBspProjects.foreach { case (workspace, initialProjects) =>
-      cleanup(workspace, initialProjects)
+    initialBspProjects.foreach {
+      case (workspace, initialProjects) =>
+        cleanup(workspace, initialProjects)
     }
   }
 

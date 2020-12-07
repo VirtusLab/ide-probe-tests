@@ -7,12 +7,15 @@ import scala.concurrent.{Await, ExecutionContext, Future, TimeoutException}
 
 object Benchmarks {
 
-  private implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newCachedThreadPool())
+  private implicit val ec: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newCachedThreadPool())
 
   def withRunningIntelliJ[A](
     expectedDuration: Duration,
     fixture: IntelliJFixture
-  )(run: RunningIntelliJFixture => A): Unit = {
+  )(
+    run: RunningIntelliJFixture => A
+  ): Unit = {
     withRunningIntelliJ(expectedDuration, expectedDuration * 2, fixture)(run)
   }
 
@@ -20,7 +23,9 @@ object Benchmarks {
     expectedDuration: Duration,
     maxDuration: Duration,
     fixture: IntelliJFixture
-  )(run: RunningIntelliJFixture => A): Unit = {
+  )(
+    run: RunningIntelliJFixture => A
+  ): Unit = {
     fixture.run { intelliJ =>
       try {
         val (duration, result) = timed {
@@ -32,7 +37,8 @@ object Benchmarks {
             s"Benchmark did not complete within expected duration: $expectedDuration. It took ${prettyPrint(duration)}."
           )
         } else {
-          println(s"Benchmark completed successfully in ${prettyPrint(duration)} (Expected less than $expectedDuration).")
+          println(
+            s"Benchmark completed successfully in ${prettyPrint(duration)} (Expected less than $expectedDuration).")
         }
         result
       } catch {

@@ -5,7 +5,8 @@ import org.virtuslab.ideprobe.robot.RobotPluginExtension
 import org.virtuslab.ideprobe.{IdeProbeFixture, ProbeDriver}
 import scala.language.implicitConversions
 
-trait PantsPluginExtension extends OpenProjectFixture with RobotPluginExtension { this: IdeProbeFixture =>
+trait PantsPluginExtension extends OpenProjectFixture with RobotPluginExtension {
+  this: IdeProbeFixture =>
   val pantsProbePlugin: Plugin = Plugin.Bundled(s"ideprobe-pants-${BuildInfo.version}.zip")
 
   DependencyProvider.registerBuilder(PantsPluginBuilder)

@@ -25,7 +25,8 @@ object PantsImport extends IntelliJApi {
 
   def importProject(path: Path, settings: PantsProjectSettingsChangeRequest): ProjectRef = {
     Projects.importFromSources(
-      path, {
+      path,
+      {
         case step: ImportChooserStep =>
           selectPantsImportModel(step)
         case step: SelectExternalProjectStep =>
@@ -41,13 +42,14 @@ object PantsImport extends IntelliJApi {
     val providersList = step.field[JBList[ProjectImportProvider]]("list")
     val pants = providersList.items
       .collectFirst { case p: PantsProjectImportProvider => p }
-      .getOrElse(error(s"Could not find pants import provider. Available providers are ${providersList.items}"))
+      .getOrElse(error(
+        s"Could not find pants import provider. Available providers are ${providersList.items}"))
     providersList.setSelectedValue(pants, false)
   }
 
   private def configurePantsSettings(
-      step: SelectExternalProjectStep,
-      settings: PantsProjectSettingsChangeRequest
+    step: SelectExternalProjectStep,
+    settings: PantsProjectSettingsChangeRequest
   ): Unit = {
     val importFromPantsControl = step.field[ImportFromPantsControl]("control")
     val pantsProjectSettingsControl =
@@ -76,7 +78,9 @@ object PantsImport extends IntelliJApi {
       }
     }
 
-    checkBox(settings.incrementalProjectImportDepth.map(_.isDefined), "enableIncrementalImportCheckBox")
+    checkBox(
+      settings.incrementalProjectImportDepth.map(_.isDefined),
+      "enableIncrementalImportCheckBox")
     checkBox(settings.loadSourcesAndDocsForLibs, "libsWithSourcesCheckBox")
     checkBox(settings.useIdeaProjectJdk, "useIdeaProjectJdkCheckBox")
     checkBox(settings.importSourceDepsAsJars, "importSourceDepsAsJarsCheckBox")
