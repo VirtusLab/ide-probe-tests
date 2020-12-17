@@ -4,7 +4,7 @@ set -x
 export IDEPROBE_DISPLAY=xvfb
 
 if [ -z "${TEST_PATTERN}" ]; then
-  sbt "pantsTests/test"
+  sbt "$TEST_TARGET/test"
 else
-  sbt "pantsTests/testOnly $TEST_PATTERN -- --ignore-runners=none"
+  sbt "$TEST_TARGET/testOnly $TEST_PATTERN -- --ignore-runners=none"
 fi

@@ -34,6 +34,13 @@ lazy val pantsProbeApi = project
     libraryDependencies += Dependencies.ideProbe.api
   )
 
+lazy val bazelProbeApi = project
+  .in(file("bazel-probe-api"))
+  .settings(
+    name := "bazel-probe-api",
+    libraryDependencies += Dependencies.ideProbe.api
+  )
+
 lazy val pantsProbePlugin = ideaPlugin("probePlugin", id = "pantsProbePlugin")
   .dependsOn(pantsProbeApi)
   .settings(
@@ -51,6 +58,23 @@ lazy val pantsProbePlugin = ideaPlugin("probePlugin", id = "pantsProbePlugin")
     name := "pants-probe-plugin"
   )
 
+lazy val bazelProbePlugin = ideaPlugin("probePluginBazel", id = "bazelProbePlugin")
+  .dependsOn(bazelProbeApi)
+  .settings(
+    libraryDependencies += Dependencies.ideProbe.probePlugin,
+    intellijPluginName := "ideprobe-bazel",
+    packageArtifactZipFilter := { file: File =>
+      // We want only this main jar to be packaged, all the library dependencies
+      // are already in the probePlugin which will be available in runtime as we
+      // depend on it in plugin.xml.
+      // The packaging plugin is created to support one plugin per build, so there
+      // seems to be no way to prevent including probePlugin.jar in the dist reasonable way.
+      file.getName == "bazelProbePlugin.jar"
+    },
+    intellijPlugins += "com.google.idea.bazel.ijwb:2020.12.01.0.1".toPlugin,
+    name := "bazel-probe-plugin"
+  )
+
 lazy val pantsProbeDriver = project
   .in(file("driver"))
   .enablePlugins(BuildInfoPlugin)
@@ -63,6 +87,20 @@ lazy val pantsProbeDriver = project
     libraryDependencies += Dependencies.ideProbe.probeScalaDriver,
     buildInfoKeys := Seq[BuildInfoKey](version),
     buildInfoPackage := "com.twitter.intellij.pants"
+  )
+
+lazy val bazelProbeDriver = project
+  .in(file("bazel-driver"))
+  .enablePlugins(BuildInfoPlugin)
+  .disableIdeaPluginDevelopment
+  .dependsOn(bazelProbeApi)
+  .settings(
+    name := "bazel-probe-driver",
+    libraryDependencies += Dependencies.ideProbe.driver,
+    libraryDependencies += Dependencies.ideProbe.robotDriver,
+    libraryDependencies += Dependencies.ideProbe.probeScalaDriver,
+    buildInfoKeys := Seq[BuildInfoKey](version),
+    buildInfoPackage := "org.virtuslab.bazelprobe.driver"
   )
 
 lazy val updateChecker = project
@@ -81,6 +119,8 @@ lazy val pantsTests = project
   .disableIdeaPluginDevelopment
   .dependsOn(pantsProbeDriver)
   .usesIdeaPlugin(pantsProbePlugin)
+  .dependsOn(bazelProbeDriver)
+  .usesIdeaPlugin(bazelProbePlugin)
   .settings(
     name := "pants-tests",
     libraryDependencies += Dependencies.ideProbe.jUnitDriver,

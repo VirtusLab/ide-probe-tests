@@ -23,6 +23,7 @@ final class ThriftIdeaPluginTest extends PantsTestSuite with Assertions with Con
       import pureconfig.generic.auto._
 
       openProject(intelliJ)
+      intelliJ.probe.awaitIdle
 
       val queryString = intelliJ.config[String]("query")
       val navigationQuery = NavigationQuery(queryString, includeNonProjectItems = true)

@@ -1,21 +1,15 @@
 package com.twitter.intellij.pants
 
-import com.twitter.intellij.pants.OpenProjectTestFixture.TestData
+import com.twitter.intellij.pants.OpenProjectTestFixtureForPantsProject.TestData
 import com.twitter.intellij.pants.protocol.PythonFacet
 import java.nio.file.Path
 import org.junit.Assert.assertEquals
 import org.junit.{Assert, Test}
-import org.virtuslab.ideprobe.junit4.RunningIntelliJPerSuite
-import org.virtuslab.ideprobe.protocol.{
-  FileRef,
-  ModuleRef,
-  ProjectRef,
-  RunFixesSpec,
-  SourceFolder,
-  VcsRoot
-}
+import org.virtuslab.ideprobe.junit4.{IdeProbeTestSuite, RunningIntelliJPerSuite}
+import org.virtuslab.ideprobe.protocol.{FileRef, ModuleRef, ProjectRef, RunFixesSpec, SourceFolder, VcsRoot}
+import org.virtuslab.ideprobe.robot.RobotPluginExtension
 import org.virtuslab.ideprobe.scala.ScalaPluginExtension
-import org.virtuslab.ideprobe.{ConfigFormat, RunningIntelliJFixture, Shell}
+import org.virtuslab.ideprobe.{ConfigFormat, IntelliJFixture, RunningIntelliJFixture, Shell}
 import pureconfig.ConfigReader
 import pureconfig.generic.semiauto.deriveReader
 
@@ -122,7 +116,7 @@ abstract class CommonOpenProjectTests {
 
 }
 
-object OpenProjectTestFixture extends ConfigFormat {
+object OpenProjectTestFixtureForPantsProject extends ConfigFormat {
   object TestData {
     case class SourceRoot(path: Path, kind: SourceFolder.Kind, packagePrefix: Option[String])
     case class Module(name: String, sourceRoots: Set[SourceRoot])
@@ -135,8 +129,9 @@ object OpenProjectTestFixture extends ConfigFormat {
 
 // Because RunningIntellijPerSuite uses @BeforeClass, which must be static, this trait must be
 // mixed in to an companion object of actual test class
-trait OpenProjectTestFixture extends PantsTestSuite with RunningIntelliJPerSuite with ConfigFormat {
-  override protected def baseFixture = fixtureFromConfig()
+
+trait OpenProjectTestFixture extends IdeProbeTestSuite with RobotPluginExtension with OpenProjectFixture with RunningIntelliJPerSuite with ConfigFormat {
+  override protected def baseFixture: IntelliJFixture = fixtureFromConfig()
 
   override def beforeAll(): Unit = {
     Shell.run(in = intelliJ.workspace, "git", "init")
@@ -146,15 +141,17 @@ trait OpenProjectTestFixture extends PantsTestSuite with RunningIntelliJPerSuite
   def openProject(): ProjectRef
 }
 
-object OpenProjectTestPants extends OpenProjectTestFixture {
+trait OpenProjectTestFixtureForPantsProject extends OpenProjectTestFixture with PantsPluginExtension
+
+object OpenProjectTestPants extends OpenProjectTestFixtureForPantsProject {
   override def openProject(): ProjectRef = openProjectWithPants(intelliJ)
 }
 
-object OpenProjectTestFastpassWithCmdLine extends OpenProjectTestFixture {
+object OpenProjectTestFastpassWithCmdLine extends OpenProjectTestFixtureForPantsProject {
   override def openProject(): ProjectRef = openProjectWithBsp(intelliJ)
 }
 
-object OpenProjectTestFastpassWithWizard extends OpenProjectTestFixture with ScalaPluginExtension {
+object OpenProjectTestFastpassWithWizard extends OpenProjectTestFixtureForPantsProject with ScalaPluginExtension {
   private def targetsFromConfig(intelliJ: RunningIntelliJFixture): Seq[String] = {
     intelliJ.config[Seq[String]]("pants.import.targets")
   }
@@ -169,3 +166,12 @@ object OpenProjectTestFastpassWithWizard extends OpenProjectTestFixture with Sca
 class OpenProjectTestFastpassWithWizard extends OpenProjectTestBspBase {
   override def intelliJ: RunningIntelliJFixture = OpenProjectTestFastpassWithWizard.intelliJ
 }
+
+
+
+
+
+// common fixtures configuration:
+
+// Because RunningIntellijPerSuite uses @BeforeClass, which must be static, this trait must be
+// mixed in to an companion object of actual test class

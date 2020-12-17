@@ -1,5 +1,6 @@
-package com.twitter.intellij.pants
+package org.virtuslab.tests
 
+import com.twitter.intellij.pants._
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 import org.junit.runners.Suite.SuiteClasses
@@ -14,7 +15,7 @@ import org.junit.runners.Suite.SuiteClasses
     classOf[PantsSettingsTest],
     classOf[ThriftIdeaPluginTest]
   ))
-class Suite1
+class Suite2
 
 @RunWith(classOf[Suite])
 @SuiteClasses(
@@ -23,11 +24,13 @@ class Suite1
     classOf[RunTestsTest],
     classOf[RerunFailedTestsTest]
   ))
-class Suite2
+class Suite1
 
 @RunWith(classOf[Suite])
 @SuiteClasses(
   Array(
-    classOf[ProjectOpenBenchmark]
+    classOf[PantsOpenProjectBenchmark],
+    classOf[BazelProjectOpenBenchmark],
+    classOf[OpenProjectTestBazel]
   ))
 class Suite3
