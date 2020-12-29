@@ -44,6 +44,7 @@ jobs:
           df -h
           du -c -h --max-depth=4 --time --threshold=500M / 2> >(grep -v 'Permission denied') || true
           ls -l /tmp
+          find /tmp -name '*.png'
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v2
