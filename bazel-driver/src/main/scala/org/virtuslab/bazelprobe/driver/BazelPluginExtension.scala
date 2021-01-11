@@ -1,6 +1,5 @@
-package com.google.idea.probetests
+package org.virtuslab.bazelprobe.driver
 
-import org.virtuslab.bazelprobe.driver.BuildInfo
 import org.virtuslab.ideprobe.dependencies.Plugin
 import org.virtuslab.ideprobe.{IdeProbeFixture, ProbeDriver}
 
