@@ -1,8 +1,8 @@
 package org.virtuslab.tests
 
-import com.google.idea.probetests.BazelPluginExtension
 import com.twitter.intellij.pants.{CommonOpenProjectTests, OpenProjectTestFixture}
 import org.junit.Test
+import org.virtuslab.bazelprobe.driver.BazelPluginExtension
 import org.virtuslab.ideprobe.RunningIntelliJFixture
 import org.virtuslab.ideprobe.protocol.ProjectRef
 

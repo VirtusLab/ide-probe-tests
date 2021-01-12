@@ -1,12 +1,12 @@
 package org.virtuslab.tests
 
-import com.google.idea.probetests.BazelPluginExtension
 import java.io.{File, FileInputStream}
 import java.net.URL
 import java.nio.file.Path
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang.SystemUtils
+import org.virtuslab.bazelprobe.driver.BazelPluginExtension
 import org.virtuslab.ideprobe.{Config, IdeProbeFixture, IntelliJFixture, OS}
 
 trait BazeliskExtension extends IdeProbeFixture with BazelPluginExtension{

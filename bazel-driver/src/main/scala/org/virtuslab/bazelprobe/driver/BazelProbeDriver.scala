@@ -1,4 +1,4 @@
-package com.google.idea.probetests
+package org.virtuslab.bazelprobe.driver
 
 import com.virtuslab.bazel.protocol.BazelEndpoints
 import org.virtuslab.ideprobe.ProbeDriver
