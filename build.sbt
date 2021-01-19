@@ -2,7 +2,7 @@ name := "ideprobe-pants"
 
 organization.in(ThisBuild) := "com.twitter.ideprobe"
 version.in(ThisBuild) := "0.1"
-scalaVersion.in(ThisBuild) := "2.13.1"
+scalaVersion.in(ThisBuild) := "2.12.10"
 resolvers.in(ThisBuild) ++= Dependencies.ideProbe.resolvers
 parallelExecution in ThisBuild := false
 skip in publish := true
