@@ -4,7 +4,9 @@ import org.virtuslab.ideprobe.Extensions._
 import org.virtuslab.ideprobe.ide.intellij.IntelliJFactory
 import org.virtuslab.ideprobe.junit4.IdeProbeTestSuite
 
-class PantsTestSuite extends IdeProbeTestSuite with PantsPluginExtension with OpenProjectFixture {
+trait PantsTestSuite
+  extends IdeProbeTestSuite
+    with PantsPluginExtension {
 
   registerFixtureTransformer { fixture =>
     fixture.withAfterIntelliJInstall { (_, intelliJ) =>

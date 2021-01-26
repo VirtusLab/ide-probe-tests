@@ -5,6 +5,7 @@ import org.virtuslab.ideprobe.{IdeProbeFixture, RunningIntelliJFixture}
 import scala.concurrent.duration.Duration
 
 trait Benchmark extends IdeProbeFixture {
+
   def benchmark(configPrefix: String, benchmarkedAction: RunningIntelliJFixture => Unit): Unit = {
     val fixture = fixtureFromConfig()
     val expectedDuration = fixture.config[Duration](s"$configPrefix.benchmark.expectedDuration")
@@ -14,4 +15,5 @@ trait Benchmark extends IdeProbeFixture {
       benchmarkedAction(intelliJ)
     }
   }
+
 }

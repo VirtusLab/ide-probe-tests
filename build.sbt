@@ -99,8 +99,9 @@ lazy val bazelProbeDriver = project
     libraryDependencies += Dependencies.ideProbe.driver,
     libraryDependencies += Dependencies.ideProbe.robotDriver,
     libraryDependencies += Dependencies.ideProbe.probeScalaDriver,
+    libraryDependencies += "commons-codec" % "commons-codec" % "1.15",
     buildInfoKeys := Seq[BuildInfoKey](version),
-    buildInfoPackage := "org.virtuslab.bazelprobe.driver"
+    buildInfoPackage := "org.virtuslab.ideprobe.bazel"
   )
 
 lazy val updateChecker = project
