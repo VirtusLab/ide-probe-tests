@@ -5,7 +5,7 @@ import org.junit.Assert.assertEquals
 import org.junit.{Assert, Test}
 import org.virtuslab.ideprobe.junit4.RunningIntelliJPerSuite
 import org.virtuslab.ideprobe.protocol.{ModuleRef, ProjectRef, SourceFolder, VcsRoot}
-import org.virtuslab.ideprobe.{ConfigFormat, IdeProbeFixture, IntelliJFixture, RunningIntelliJFixture, Shell}
+import org.virtuslab.ideprobe.{ConfigFormat, IdeProbeFixture, IntelliJFixture, RunningIntelliJFixture, Shell, error}
 import org.virtuslab.tests.OpenProjectTest.TestData
 import pureconfig.ConfigReader
 import pureconfig.generic.semiauto.deriveReader
@@ -55,9 +55,24 @@ trait OpenProjectTest {
           TestData.SourceRoot(relative(sf.path), sf.kind, sf.packagePrefix)))
     }
 
-    Assert.assertTrue(
-      s"Expected modules: $expectedModules, actual modules: $importedModules (not a subset)",
-      expectedModules.toSet.subsetOf(importedModules.toSet))
+    checkModules(expectedModules.toSet, importedModules.toSet)
+  }
+
+  private def checkModules(
+    expectedModules: Set[TestData.Module],
+    importedModules: Set[TestData.Module]
+  ): Unit = {
+    val missingModules = expectedModules.map(_.name) -- importedModules.map(_.name)
+    if (missingModules.nonEmpty) {
+      error(s"Missing expected modules: $missingModules. Actual modules: $importedModules")
+    }
+    expectedModules.foreach { expectedModule =>
+      val actualModule = importedModules.find(_.name == expectedModule.name).get
+      val missingSourceRoots = expectedModule.sourceRoots -- actualModule.sourceRoots
+      if (missingSourceRoots.nonEmpty) {
+        error(s"Missing source roots: $missingSourceRoots in module $actualModule")
+      }
+    }
   }
 
   @Test def checkProjectSdkSet(): Unit = {

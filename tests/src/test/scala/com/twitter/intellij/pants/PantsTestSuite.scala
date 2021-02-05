@@ -1,7 +1,6 @@
 package com.twitter.intellij.pants
 
 import org.virtuslab.ideprobe.Extensions._
-import org.virtuslab.ideprobe.ide.intellij.IntelliJFactory
 import org.virtuslab.ideprobe.junit4.IdeProbeTestSuite
 
 trait PantsTestSuite
@@ -13,11 +12,6 @@ trait PantsTestSuite
       val plugins = intelliJ.paths.plugins
       plugins.resolve("Kotlin").delete()
       plugins.resolve("android").delete()
-    }
-  }
-
-  registerFixtureTransformer { fixture =>
-    fixture.withAfterIntelliJInstall { (_, intelliJ) =>
       intelliJ.paths.bin.resolve("printenv.py").makeExecutable()
     }
   }
@@ -25,6 +19,12 @@ trait PantsTestSuite
   registerFixtureTransformer { fixture =>
     fixture.withAfterWorkspaceSetup { (_, workspace) =>
       BspWorkspaceMonitor.register(workspace)
+    }
+  }
+
+  registerFixtureTransformer { fixture =>
+    fixture.withAfterWorkspaceSetup { (fixture, workspace) =>
+      FastpassSetup.overrideFastpassVersion(fixture, workspace)
     }
   }
 

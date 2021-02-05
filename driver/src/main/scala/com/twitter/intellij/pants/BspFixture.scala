@@ -13,7 +13,7 @@ trait BspFixture {
   lazy val coursierPath: Path = {
     val destination = Paths.get(System.getProperty("java.io.tmpdir"), "ideprobe-coursier")
     if (!Files.exists(destination)) {
-      val url = new URL("https://git.io/coursier-cli")
+      val url = new URL(sys.env.getOrElse("FASTPASS_COURSIER_URL", "https://git.io/coursier-cli"))
       Files.copy(url.openConnection.getInputStream, destination)
       destination.toFile.setExecutable(true)
     }

@@ -52,15 +52,29 @@ trait BazelOpenProjectFixture extends BazeliskExtension { this: RobotPluginExten
   }
 
   private def prepareBazelProjectViewFile(config: Config, workspace: Path): Path = {
-    val toImport = config[List[String]]("bazel.import.directories")
-    val directories = toImport.map("  " + _).mkString("\n")
+    val directories = config[List[String]]("bazel.import.directories")
+    val additionalLanguages = config.get[List[String]]("bazel.import.languages").getOrElse(Nil)
+
     val text =
-      s"""directories:
-         |$directories
+      s"""${section("directories", directories)}
          |
-         |derive_targets_from_directories: true""".stripMargin
+         |derive_targets_from_directories: true
+         |
+         |${section("additional_languages", additionalLanguages)}""".stripMargin
     val file = workspace.resolve(s"ide-probe${UUID.randomUUID()}.viewconfig")
     file.write(text)
     workspace.relativize(file)
+  }
+
+  private def section(name: String, elements: List[String]): String = {
+    if (elements.isEmpty) {
+      ""
+    } else {
+      s"$name:\n${indentStrings(elements)}\n"
+    }
+  }
+
+  private def indentStrings(strs: List[String]) = {
+    strs.map("  " + _).mkString("\n")
   }
 }

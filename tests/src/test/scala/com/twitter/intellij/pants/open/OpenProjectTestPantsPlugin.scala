@@ -15,7 +15,7 @@ object OpenProjectTestPantsPlugin extends OpenProjectTestFixturePants {
 class OpenProjectTestPantsPlugin extends OpenProjectTest {
   override def intelliJ: RunningIntelliJFixture = OpenProjectTestPantsPlugin.intelliJ
 
-  override def checkGitRepositoryRootDetected(): Unit = {
+  @Test override def checkGitRepositoryRootDetected(): Unit = {
     println("Git repository root is not supported in open source tests")
   }
 
