@@ -103,8 +103,9 @@ abstract class CommonOpenProjectTests {
 
   @Test def hasModuleSdksSet(): Unit = {
     val project = intelliJ.probe.projectModel()
-    val expectedModulesWithSdk =
-      intelliJ.config[Seq[TestData.Module]]("project.modules").map(_.name)
+    val pythonModules = intelliJ.config.get[Set[String]]("project.pythonModules").getOrElse(Nil)
+    val allModules = intelliJ.config[Set[TestData.Module]]("project.modules").map(_.name)
+    val expectedModulesWithSdk = allModules -- pythonModules
 
     val modulesWithoutSdk = project.modules
       .filter(module => module.kind.isDefined && expectedModulesWithSdk.contains(module.name))
