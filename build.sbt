@@ -79,7 +79,7 @@ lazy val pantsProbeDriver = project
   .in(file("driver"))
   .enablePlugins(BuildInfoPlugin)
   .disableIdeaPluginDevelopment
-  .dependsOn(pantsProbeApi)
+  .usesIdeaPlugin(pantsProbePlugin)
   .settings(
     name := "pants-probe-driver",
     libraryDependencies += Dependencies.ideProbe.driver,
@@ -93,14 +93,15 @@ lazy val bazelProbeDriver = project
   .in(file("bazel-driver"))
   .enablePlugins(BuildInfoPlugin)
   .disableIdeaPluginDevelopment
-  .dependsOn(bazelProbeApi)
+  .usesIdeaPlugin(bazelProbePlugin)
   .settings(
     name := "bazel-probe-driver",
     libraryDependencies += Dependencies.ideProbe.driver,
     libraryDependencies += Dependencies.ideProbe.robotDriver,
     libraryDependencies += Dependencies.ideProbe.probeScalaDriver,
+    libraryDependencies += "commons-codec" % "commons-codec" % "1.15",
     buildInfoKeys := Seq[BuildInfoKey](version),
-    buildInfoPackage := "org.virtuslab.bazelprobe.driver"
+    buildInfoPackage := "org.virtuslab.ideprobe.bazel"
   )
 
 lazy val updateChecker = project
@@ -118,9 +119,7 @@ lazy val pantsTests = project
   .in(file("tests"))
   .disableIdeaPluginDevelopment
   .dependsOn(pantsProbeDriver)
-  .usesIdeaPlugin(pantsProbePlugin)
   .dependsOn(bazelProbeDriver)
-  .usesIdeaPlugin(bazelProbePlugin)
   .settings(
     name := "pants-tests",
     libraryDependencies += Dependencies.ideProbe.jUnitDriver,
