@@ -2,7 +2,7 @@ package org.virtuslab.tests.bazel
 
 import org.junit.{Assert, Test}
 import org.virtuslab.ideprobe.RunningIntelliJFixture
-import org.virtuslab.ideprobe.protocol.ProjectRef
+import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
 import org.virtuslab.tests.{OpenProjectTest, OpenProjectTestFixture}
 
 
@@ -39,4 +39,10 @@ class OpenProjectTestBazel extends BazelTestSuite with OpenProjectTest {
     assert(buildLogs.exists(_.fullText.contains("Build completed successfully")))
   }
 
+  @Test def testSuccessful() : Unit = {
+    import pureconfig.generic.auto._
+    intelliJ.probe.awaitIdle()
+    val runConfig = intelliJ.config[TestScope.Method]("runConfiguration")
+    intelliJ.probe.runTestsFromGenerated(runConfig)
+  }
 }
