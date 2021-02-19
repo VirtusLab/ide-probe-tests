@@ -7,7 +7,7 @@ object Dependencies {
   )
 
   object ideProbe {
-    val version = "0.2.2+48-e1ef66b9+20201116-1051-SNAPSHOT"
+    val version = "0.4.0"
     val resolvers = Seq(
       Resolver.sonatypeRepo("public"),
       Resolver.sonatypeRepo("snapshots"),
@@ -20,11 +20,10 @@ object Dependencies {
       "org.virtuslab.ideprobe" %% name % version
     }
 
-    val api = apply("api")
-    val driver = apply("driver")
     val jUnitDriver = apply("junit-driver")
-    val probePlugin = apply("probe-plugin")
-    val probeScalaDriver = apply("scala-probe-driver")
+    val scalaDriver = apply("scala-probe-driver")
+    val bazelDriver = apply("bazel-probe-driver")
+    val pantsDriver = apply("pants-probe-driver")
     val robotDriver = apply("robot-driver")
   }
 
