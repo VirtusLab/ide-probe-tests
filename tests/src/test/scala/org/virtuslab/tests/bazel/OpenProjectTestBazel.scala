@@ -1,5 +1,6 @@
 package org.virtuslab.tests.bazel
 
+import java.nio.file.Paths
 import org.junit.{Assert, Test}
 import org.virtuslab.ideprobe.RunningIntelliJFixture
 import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
@@ -44,5 +45,21 @@ class OpenProjectTestBazel extends BazelTestSuite with OpenProjectTest {
     intelliJ.probe.awaitIdle()
     val runConfig = intelliJ.config[TestScope.Method]("runConfiguration")
     intelliJ.probe.runTestsFromGenerated(runConfig)
+  }
+
+  case class Location(file: String, line: Int, column: Int)
+
+  @Test def thriftGoToDefinition(): Unit = {
+    import pureconfig.generic.auto._
+    val referenceLocation = intelliJ.config[Location]("goToDefinition.referenceLocation")
+    val definitionLocation = intelliJ.config[Location]("goToDefinition.definitionLocation")
+    val path = intelliJ.workspace.resolve(referenceLocation.file).toRealPath()
+    intelliJ.probe.openFile(ProjectRef.Default, path)
+    intelliJ.probe.goToLineColumn(ProjectRef.Default, referenceLocation.line, referenceLocation.column)
+    intelliJ.probe.awaitIdle()
+    intelliJ.probe.invokeActionAsync("com.intellij.plugins.thrift.editor.GoToThriftDefinition")
+    val openFiles = intelliJ.probe.openFiles(ProjectRef.Default)
+    assert(openFiles.exists(Paths.get(_).endsWith(definitionLocation.file)))
+
   }
 }

@@ -5,9 +5,9 @@ object Dependencies {
     "junit" % "junit" % "4.12" % Test,
     ("com.novocode" % "junit-interface" % "0.11" % Test).exclude("junit", "junit-dep")
   )
-
+  
   object ideProbe {
-    val version = "0.4.0"
+    val version = "0.3.0+52-49e9bc63-SNAPSHOT"
     val resolvers = Seq(
       Resolver.sonatypeRepo("public"),
       Resolver.sonatypeRepo("snapshots"),
