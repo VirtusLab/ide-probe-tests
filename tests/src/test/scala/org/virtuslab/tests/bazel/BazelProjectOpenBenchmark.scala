@@ -1,10 +1,10 @@
 package org.virtuslab.tests.bazel
 
 import org.junit.Test
-import org.virtuslab.tests.Benchmark
+import org.virtuslab.ideprobe.DurationCheckFixture
 
-class BazelProjectOpenBenchmark extends BazelTestSuite with Benchmark {
+class BazelProjectOpenBenchmark extends BazelTestSuite with DurationCheckFixture {
 
-  @Test def bazel(): Unit = benchmark("bazel", openProjectWithBazel)
+  @Test def bazel(): Unit = checkDuration("bazel", openProjectWithBazel)
 
 }

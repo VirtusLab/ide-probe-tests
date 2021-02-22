@@ -1,11 +1,11 @@
 package org.virtuslab.tests
 
-import com.twitter.intellij.pants._
-import com.twitter.intellij.pants.open.{OpenProjectTestFastpassWithCmdLine, OpenProjectTestFastpassWithWizard, OpenProjectTestPantsPlugin}
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 import org.junit.runners.Suite.SuiteClasses
-import org.virtuslab.tests.bazel.{BazelProjectOpenBenchmark, OpenProjectTestBazel}
+import org.virtuslab.tests.bazel._
+import org.virtuslab.tests.pants._
+import org.virtuslab.tests.pants.open._
 
 @RunWith(classOf[Suite])
 @SuiteClasses(

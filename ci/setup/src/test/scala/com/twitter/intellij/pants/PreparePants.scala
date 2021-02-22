@@ -6,6 +6,8 @@ import org.junit.Test
 import org.virtuslab.ideprobe.{Config, Id, IntelliJFixture}
 import org.virtuslab.ideprobe.Extensions._
 import org.virtuslab.ideprobe.dependencies.{GitRepository, Plugin}
+import org.virtuslab.ideprobe.pants.PantsSetup
+import org.virtuslab.tests.pants.PantsTestSuite
 import pureconfig.{ConfigSource, ConfigWriter}
 
 class PreparePants extends PantsTestSuite {
