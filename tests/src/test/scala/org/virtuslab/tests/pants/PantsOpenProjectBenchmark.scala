@@ -8,5 +8,3 @@ class PantsOpenProjectBenchmark extends PantsTestSuite with DurationCheckFixture
 
   @Test def bsp(): Unit = checkDuration("bsp", openProjectWithBsp)
 }
-
-
