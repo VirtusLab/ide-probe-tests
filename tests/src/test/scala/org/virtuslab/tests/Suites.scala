@@ -33,6 +33,7 @@ class Suite1
   Array(
     classOf[PantsOpenProjectBenchmark],
     classOf[BazelProjectOpenBenchmark],
-    classOf[OpenProjectTestBazel]
+    classOf[OpenProjectTestBazel],
+    classOf[OpenProjectTestBazelWithCmdLine]
   ))
 class Suite3
