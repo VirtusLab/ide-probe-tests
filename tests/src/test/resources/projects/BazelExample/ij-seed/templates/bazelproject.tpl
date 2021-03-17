@@ -14,5 +14,4 @@ additional_languages:
   # android
   # dart
   # kotlin
-  python
-  scala
+  {LANGUAGES}

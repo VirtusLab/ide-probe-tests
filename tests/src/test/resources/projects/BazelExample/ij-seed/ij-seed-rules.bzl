@@ -1,3 +1,5 @@
+load(":custom-flag-rules.bzl", "LanguageInfo")
+
 def _idea_launcher_impl(ctx):
     ctx.actions.expand_template(
         template = ctx.file._template,
@@ -21,6 +23,7 @@ def _idea_seed_impl(ctx):
         template = ctx.file._template2,
         output = ctx.outputs._bazelproject,
         substitutions = {
+            "{LANGUAGES}": ctx.attr.language[LanguageInfo].name,
         },
     )
     return DefaultInfo(
@@ -54,6 +57,7 @@ idea_seed = rule(
             default = "templates/bazelproject.tpl",
             allow_single_file = True,
         ),
+        "language": attr.label(),
     },
     outputs = {
         "_workspacexml": ".idea/workspace.xml",
