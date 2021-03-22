@@ -42,7 +42,7 @@ class OpenProjectTestBazel extends BazelTestSuite with OpenProjectTest {
 
   @Test def testSuccessful() : Unit = {
     import pureconfig.generic.auto._
-    intelliJ.probe.awaitIdle()
+    intelliJ.probe.await()
     val runConfig = intelliJ.config[TestScope.Method]("runConfiguration")
     intelliJ.probe.runTestsFromGenerated(runConfig)
   }
@@ -56,7 +56,7 @@ class OpenProjectTestBazel extends BazelTestSuite with OpenProjectTest {
     val path = intelliJ.workspace.resolve(referenceLocation.file).toRealPath()
     intelliJ.probe.openFile(ProjectRef.Default, path)
     intelliJ.probe.goToLineColumn(ProjectRef.Default, referenceLocation.line, referenceLocation.column)
-    intelliJ.probe.awaitIdle()
+    intelliJ.probe.await()
     intelliJ.probe.invokeActionAsync("com.intellij.plugins.thrift.editor.GoToThriftDefinition")
     val openFiles = intelliJ.probe.openFiles(ProjectRef.Default)
     assert(openFiles.exists(Paths.get(_).endsWith(definitionLocation.file)))
