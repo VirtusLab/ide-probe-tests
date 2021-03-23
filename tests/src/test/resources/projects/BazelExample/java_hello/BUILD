@@ -10,5 +10,8 @@ java_test(
     srcs = glob([
         "src/test/java/com/hello/tests/*.java"
     ]),
+    deps = [
+        "//thrift_hello:thrift_hello_scrooge"
+    ],
     test_class = "com.hello.tests.HelloTest",
 )
