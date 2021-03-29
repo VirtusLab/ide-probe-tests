@@ -13,12 +13,12 @@ final class BUILDFilesTest extends PantsTestSuite with Assertions {
 
   @Test
   def referencesOtherBUILDFilesInBsp(): Unit = {
-    checkReferencesToOtherBUILDFiles(openProjectWithBsp)
+    checkReferencesToOtherBUILDFiles(openProjectWithBsp(_))
   }
 
   @Test
   def referencesOtherBUILDFilesInPants(): Unit = {
-    checkReferencesToOtherBUILDFiles(openProjectWithPants)
+    checkReferencesToOtherBUILDFiles(openProjectWithPants(_))
   }
 
   def checkReferencesToOtherBUILDFiles(openProject: RunningIntelliJFixture => ProjectRef): Unit = {

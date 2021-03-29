@@ -1,6 +1,5 @@
 package org.virtuslab.tests.bazel
 
-import java.nio.file.Paths
 import org.junit.{Assert, Test}
 import org.virtuslab.ideprobe.RunningIntelliJFixture
 import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
@@ -54,12 +53,11 @@ class OpenProjectTestBazel extends BazelTestSuite with OpenProjectTest {
     val referenceLocation = intelliJ.config[Location]("goToDefinition.referenceLocation")
     val definitionLocation = intelliJ.config[Location]("goToDefinition.definitionLocation")
     val path = intelliJ.workspace.resolve(referenceLocation.file).toRealPath()
-    intelliJ.probe.openFile(ProjectRef.Default, path)
+    intelliJ.probe.openEditor(path)
     intelliJ.probe.goToLineColumn(ProjectRef.Default, referenceLocation.line, referenceLocation.column)
     intelliJ.probe.await()
     intelliJ.probe.invokeActionAsync("com.intellij.plugins.thrift.editor.GoToThriftDefinition")
-    val openFiles = intelliJ.probe.openFiles(ProjectRef.Default)
-    assert(openFiles.exists(Paths.get(_).endsWith(definitionLocation.file)))
-
+    val openFiles = intelliJ.probe.listOpenEditors()
+    assert(openFiles.exists(_.endsWith(definitionLocation.file)))
   }
 }

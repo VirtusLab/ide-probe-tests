@@ -8,7 +8,7 @@ import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
 class RerunFailedTestsTest extends PantsTestSuite with ConfigFormat {
 
   @Test def runTestsWithBsp(): Unit = {
-    runTests("bsp", openProjectWithBsp, _.probe.build().assertSuccess())
+    runTests("bsp", openProjectWithBsp(_), _.probe.build().assertSuccess())
   }
 
   private def runTests(

@@ -9,11 +9,11 @@ import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
 class RunTestsTest extends PantsTestSuite with ConfigFormat {
 
   @Test def runTestsWithBsp(): Unit = {
-    runTests("bsp", openProjectWithBsp, _.probe.build().assertSuccess())
+    runTests("bsp", openProjectWithBsp(_), _.probe.build().assertSuccess())
   }
 
   @Test def runTestsWithPants(): Unit = {
-    runTests("pants", openProjectWithPants, _.probe.compileAllTargets().assertSuccess())
+    runTests("pants", openProjectWithPants(_), _.probe.compileAllTargets().assertSuccess())
   }
 
   private def runTests(
