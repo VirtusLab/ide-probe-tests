@@ -2,10 +2,11 @@ package org.virtuslab.tests.pants
 
 import org.junit.Assert._
 import org.junit.Test
-import org.virtuslab.ideprobe.{ConfigFormat, RunningIntelliJFixture}
+import org.virtuslab.ideprobe.{RunningIntelliJFixture, WaitLogic}
 import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
+import scala.concurrent.duration.DurationInt
 
-class RerunFailedTestsTest extends PantsTestSuite with ConfigFormat {
+class RerunFailedTestsTest extends PantsTestSuite {
 
   @Test def runTestsWithBsp(): Unit = {
     runTests("bsp", openProjectWithBsp(_), _.probe.build().assertSuccess())
@@ -17,16 +18,22 @@ class RerunFailedTestsTest extends PantsTestSuite with ConfigFormat {
     buildProject: RunningIntelliJFixture => Unit
   ): Unit = {
     fixtureFromConfig().run { intelliJ =>
-      import pureconfig.generic.auto._
-
       openProject(intelliJ)
       buildProject(intelliJ)
 
-      val runConfiguration = intelliJ.config[TestScope.Module](s"$configPrefix.runConfiguration")
+      val runConfiguration = intelliJ.config[TestScope](s"$configPrefix.runConfiguration")
       val runnerName = intelliJ.config.get[String](s"$configPrefix.runnerName")
       val moduleName = runConfiguration.module.name
 
       val result = intelliJ.probe.runTestsFromGenerated(runConfiguration, runnerName)
+
+      // Running tests endpoint does not wait for any background tasks, because waiting
+      // for tests results is handled inside IntelliJ.
+      // This test however reads results from logs because the endpoint os not fully
+      // correct in terms of what it returns. See https://github.com/VirtusLab/ide-probe/issues/117
+      // Hence we need to wait for logs to appear before accessing them.
+      intelliJ.probe.await(WaitLogic.constant(1.second))
+
       val errorsInitial = intelliJ.probe.errors
       assertEquals(s"number of test suites in in $moduleName", 1, result.suites.size)
       assertEquals("initial number of errors", errorsInitial.size, 2)
