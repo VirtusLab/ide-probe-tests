@@ -10,12 +10,12 @@ final class ThriftIdeaPluginTest extends PantsTestSuite with Assertions with Con
 
   @Test
   def findThriftFilesPants(): Unit = {
-    findThriftFiles(openProjectWithPants)
+    findThriftFiles(openProjectWithPants(_))
   }
 
   @Test
   def findThriftFilesBsp(): Unit = {
-    findThriftFiles(openProjectWithBsp)
+    findThriftFiles(openProjectWithBsp(_))
   }
 
   def findThriftFiles(openProject: RunningIntelliJFixture => ProjectRef): Unit = {

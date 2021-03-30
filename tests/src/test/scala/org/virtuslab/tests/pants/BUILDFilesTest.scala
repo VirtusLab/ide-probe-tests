@@ -8,17 +8,27 @@ import org.virtuslab.ideprobe.protocol.FileRef
 import org.virtuslab.ideprobe.protocol.ProjectRef
 import org.virtuslab.ideprobe.protocol.Reference
 import org.virtuslab.ideprobe.Extensions._
+import org.virtuslab.ideprobe.dependencies.Plugin
 
 final class BUILDFilesTest extends PantsTestSuite with Assertions {
 
+  // bazel overrides handling of BUILD files that is in pants plugin
+  registerFixtureTransformer { fixture =>
+    fixture.copy(plugins = fixture.plugins.filter {
+      case plugin: Plugin.Versioned =>
+        plugin.id != "com.google.idea.bazel.ijwb"
+      case _ => true
+    })
+  }
+
   @Test
   def referencesOtherBUILDFilesInBsp(): Unit = {
-    checkReferencesToOtherBUILDFiles(openProjectWithBsp)
+    checkReferencesToOtherBUILDFiles(openProjectWithBsp(_))
   }
 
   @Test
   def referencesOtherBUILDFilesInPants(): Unit = {
-    checkReferencesToOtherBUILDFiles(openProjectWithPants)
+    checkReferencesToOtherBUILDFiles(openProjectWithPants(_))
   }
 
   def checkReferencesToOtherBUILDFiles(openProject: RunningIntelliJFixture => ProjectRef): Unit = {

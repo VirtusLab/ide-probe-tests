@@ -4,7 +4,7 @@ import org.junit.Test
 import org.virtuslab.ideprobe.DurationCheckFixture
 
 class PantsOpenProjectBenchmark extends PantsTestSuite with DurationCheckFixture {
-  @Test def pants(): Unit = checkDuration("pants", openProjectWithPants)
+  @Test def pants(): Unit = checkDuration("pants", openProjectWithPants(_))
 
-  @Test def bsp(): Unit = checkDuration("bsp", openProjectWithBsp)
+  @Test def bsp(): Unit = checkDuration("bsp", openProjectWithBsp(_))
 }

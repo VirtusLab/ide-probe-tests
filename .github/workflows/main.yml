@@ -40,11 +40,6 @@ jobs:
           echo "TEST_PATTERN=$TEST_PATTERN"
           echo "TEST_TARGET=$TEST_TARGET"
           ./ci/run_docker.sh bash ci/test.sh
-      - name: Environment checks
-        if: always()
-        run: |
-          df -h
-          du -c -h --max-depth=4 --time --threshold=500M / 2> >(grep -v 'Permission denied') || true
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v2

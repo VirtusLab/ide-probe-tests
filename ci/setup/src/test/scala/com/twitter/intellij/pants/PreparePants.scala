@@ -11,7 +11,7 @@ import org.virtuslab.tests.pants.PantsTestSuite
 class PreparePants extends PantsTestSuite {
   @Test def run(): Unit = {
     val fixture = IntelliJFixture
-      .fromConfig(Config.fromClasspath("pants.conf"))
+      .fromConfig(Config.fromClasspath("base.conf"))
       .withPlugin(Plugin.Versioned("com.intellij.plugins.pants", version = "1.17.0.2ee673770d628ec4c49cddf49a15bc8c6ab2457c", channel = Some("bleedingedge")))
     val workspace = fixture.setupWorkspace()
     val intellij = fixture.installIntelliJ()
