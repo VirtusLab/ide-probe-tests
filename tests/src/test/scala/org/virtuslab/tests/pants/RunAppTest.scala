@@ -6,8 +6,9 @@ import org.virtuslab.ideprobe.ConfigFormat
 import org.virtuslab.ideprobe.RunningIntelliJFixture
 import org.virtuslab.ideprobe.protocol.ApplicationRunConfiguration
 import org.virtuslab.ideprobe.protocol.ProjectRef
+import org.virtuslab.tests.IdeProbeTest
 
-class RunAppTest extends PantsTestSuite with ConfigFormat {
+class RunAppTest extends IdeProbeTest with ConfigFormat {
 
   @Test
   def runsMainClassWithPants(): Unit = {

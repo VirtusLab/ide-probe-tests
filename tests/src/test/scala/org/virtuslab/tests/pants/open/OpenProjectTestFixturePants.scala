@@ -1,9 +1,8 @@
 package org.virtuslab.tests.pants.open
 
-import org.virtuslab.tests.OpenProjectTestFixture
-import org.virtuslab.tests.pants.PantsTestSuite
+import org.virtuslab.tests.{OpenProjectTestFixture, IdeProbeTest}
 
 trait OpenProjectTestFixturePants
-  extends PantsTestSuite
+  extends IdeProbeTest
   with OpenProjectTestFixture
 

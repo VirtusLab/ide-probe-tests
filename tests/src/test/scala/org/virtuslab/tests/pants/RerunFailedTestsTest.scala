@@ -4,9 +4,10 @@ import org.junit.Assert._
 import org.junit.Test
 import org.virtuslab.ideprobe.{RunningIntelliJFixture, WaitLogic}
 import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
+import org.virtuslab.tests.IdeProbeTest
 import scala.concurrent.duration.DurationInt
 
-class RerunFailedTestsTest extends PantsTestSuite {
+class RerunFailedTestsTest extends IdeProbeTest {
 
   @Test def runTestsWithBsp(): Unit = {
     runTests("bsp", openProjectWithBsp(_), _.probe.build().assertSuccess())

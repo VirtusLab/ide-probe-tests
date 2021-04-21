@@ -5,8 +5,9 @@ import org.junit.Test
 import org.virtuslab.ideprobe.ConfigFormat
 import org.virtuslab.ideprobe.RunningIntelliJFixture
 import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
+import org.virtuslab.tests.IdeProbeTest
 
-class RunTestsTest extends PantsTestSuite with ConfigFormat {
+class RunTestsTest extends IdeProbeTest with ConfigFormat {
 
   @Test def runTestsWithBsp(): Unit = {
     runTests("bsp", openProjectWithBsp(_), _.probe.build().assertSuccess())

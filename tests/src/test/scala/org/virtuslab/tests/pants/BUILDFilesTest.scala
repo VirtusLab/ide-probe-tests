@@ -9,8 +9,9 @@ import org.virtuslab.ideprobe.protocol.ProjectRef
 import org.virtuslab.ideprobe.protocol.Reference
 import org.virtuslab.ideprobe.Extensions._
 import org.virtuslab.ideprobe.dependencies.Plugin
+import org.virtuslab.tests.IdeProbeTest
 
-final class BUILDFilesTest extends PantsTestSuite with Assertions {
+final class BUILDFilesTest extends IdeProbeTest with Assertions {
 
   // bazel overrides handling of BUILD files that is in pants plugin
   registerFixtureTransformer { fixture =>

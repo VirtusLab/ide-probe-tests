@@ -5,8 +5,9 @@ import org.virtuslab.ideprobe.{Assertions, ConfigFormat, RunningIntelliJFixture}
 import org.virtuslab.ideprobe.protocol.NavigationQuery
 import org.virtuslab.ideprobe.protocol.NavigationTarget
 import org.virtuslab.ideprobe.protocol.ProjectRef
+import org.virtuslab.tests.IdeProbeTest
 
-final class ThriftIdeaPluginTest extends PantsTestSuite with Assertions with ConfigFormat {
+final class ThriftIdeaPluginTest extends IdeProbeTest with Assertions with ConfigFormat {
 
   @Test
   def findThriftFilesPants(): Unit = {

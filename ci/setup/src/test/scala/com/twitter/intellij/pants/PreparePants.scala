@@ -6,9 +6,9 @@ import org.virtuslab.ideprobe.{Config, IntelliJFixture}
 import org.virtuslab.ideprobe.Extensions._
 import org.virtuslab.ideprobe.dependencies.Plugin
 import org.virtuslab.ideprobe.pants.PantsSetup
-import org.virtuslab.tests.pants.PantsTestSuite
+import org.virtuslab.tests.IdeProbeTest
 
-class PreparePants extends PantsTestSuite {
+class PreparePants extends IdeProbeTest {
   @Test def run(): Unit = {
     val fixture = IntelliJFixture
       .fromConfig(Config.fromClasspath("base.conf"))

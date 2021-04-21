@@ -4,8 +4,9 @@ import org.junit.Assert._
 import org.junit.Test
 import org.virtuslab.ideprobe.pants.protocol.PantsProjectSettingsChangeRequest
 import org.virtuslab.ideprobe.protocol.Setting
+import org.virtuslab.tests.IdeProbeTest
 
-class PantsSettingsTest extends PantsTestSuite {
+class PantsSettingsTest extends IdeProbeTest {
 
   @Test def importProjectWithCustomSettings(): Unit = {
     fixtureFromConfig().run { intelliJ =>
