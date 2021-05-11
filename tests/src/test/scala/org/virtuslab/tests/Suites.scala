@@ -32,7 +32,7 @@ class Suite1
 @SuiteClasses(
   Array(
     classOf[PantsOpenProjectBenchmark],
-    classOf[BazelProjectOpenBenchmark],
-    classOf[OpenProjectTestBazel]
+    classOf[OpenProjectTestBazel],
+    classOf[BazelProjectOpenBenchmark]
   ))
 class Suite3

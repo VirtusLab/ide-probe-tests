@@ -3,8 +3,8 @@
 set -x
 
 DOCKER_IMAGE=ideprobe-pants:local
-DOCKER_DIRECTORY=/tmp/ideprobe/output
-HOST_DIRECTORY=/tmp/ideprobe/output
+DOCKER_DIRECTORY=/tmp/ide-probe/output
+HOST_DIRECTORY=/tmp/ide-probe/output
 
 mkdir -p "${HOST_DIRECTORY}"
 docker run  \
