@@ -22,9 +22,9 @@ class Suite2
 @RunWith(classOf[Suite])
 @SuiteClasses(
   Array(
-    classOf[RunAppTest],
+    //classOf[RunAppTest],
     classOf[RunTestsTest],
-    classOf[RerunFailedTestsTest]
+    //classOf[RerunFailedTestsTest]
   ))
 class Suite1
 

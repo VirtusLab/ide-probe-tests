@@ -13,7 +13,7 @@ object Dependencies {
       Resolver.sonatypeRepo("snapshots"),
       MavenRepository(
         "jetbrains-3rd",
-        "https://jetbrains.bintray.com/intellij-third-party-dependencies")
+        "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies")
     )
 
     def apply(name: String): ModuleID = {
