@@ -21,12 +21,11 @@ class RunTestsTest extends PantsTestSuite with ConfigFormat {
     openProject: RunningIntelliJFixture => ProjectRef,
     buildProject: RunningIntelliJFixture => Unit
   ): Unit = {
-    import pureconfig.generic.auto._
     fixtureFromConfig().run { intelliJ =>
       openProject(intelliJ)
       buildProject(intelliJ)
 
-      val runConfiguration = intelliJ.config[TestScope.Package](s"runConfiguration.$configSuffix")
+      val runConfiguration = intelliJ.config[TestScope](s"runConfiguration.$configSuffix")
       val moduleName = runConfiguration.module.name
 
       val result = intelliJ.probe.runJUnit(runConfiguration)

@@ -14,11 +14,11 @@ final class BUILDFilesTest extends PantsTestSuite with Assertions {
 
   // bazel overrides handling of BUILD files that is in pants plugin
   registerFixtureTransformer { fixture =>
-    fixture.copy(plugins = fixture.plugins.filter {
+    fixture.copy(intelliJProvider = fixture.intelliJProvider.withPlugins(fixture.intelliJProvider.plugins.filter {
       case plugin: Plugin.Versioned =>
         plugin.id != "com.google.idea.bazel.ijwb"
       case _ => true
-    })
+    }:_*))
   }
 
   @Test

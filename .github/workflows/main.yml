@@ -31,7 +31,7 @@ jobs:
           df -h
       - name: Prepare the container
         run: |
-          docker build --tag ideprobe-pants:local .
+          docker build --tag ideprobe-pants-tests:local .
       - name: Run ${{ matrix.suite-name }}
         env:
           TEST_PATTERN: ${{ matrix.suite-name }}

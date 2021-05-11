@@ -5,7 +5,6 @@ import org.virtuslab.ideprobe.RunningIntelliJFixture
 import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
 import org.virtuslab.tests.{OpenProjectTest, OpenProjectTestFixture}
 
-
 object OpenProjectTestBazel
   extends BazelTestSuite
     with OpenProjectTestFixture {
