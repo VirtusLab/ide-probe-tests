@@ -9,16 +9,19 @@ import org.virtuslab.ideprobe.protocol.ProjectRef
 import org.virtuslab.ideprobe.protocol.Reference
 import org.virtuslab.ideprobe.Extensions._
 import org.virtuslab.ideprobe.dependencies.Plugin
+import org.virtuslab.ideprobe.ide.intellij.IntelliJFactory
 
 final class BUILDFilesTest extends PantsTestSuite with Assertions {
 
   // bazel overrides handling of BUILD files that is in pants plugin
   registerFixtureTransformer { fixture =>
-    fixture.copy(plugins = fixture.plugins.filter {
-      case plugin: Plugin.Versioned =>
-        plugin.id != "com.google.idea.bazel.ijwb"
-      case _ => true
-    })
+    val provider = fixture.intelliJProvider.asInstanceOf[IntelliJFactory]
+      .copy(plugins = fixture.intelliJProvider.plugins.filter {
+        case plugin: Plugin.Versioned =>
+          plugin.id != "com.google.idea.bazel.ijwb"
+        case _ => true
+      })
+    fixture.copy(intelliJProvider = provider)
   }
 
   @Test

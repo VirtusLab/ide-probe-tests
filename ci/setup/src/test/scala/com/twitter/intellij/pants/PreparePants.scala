@@ -19,7 +19,7 @@ class PreparePants extends PantsTestSuite {
     PantsSetup.overridePantsVersion(fixture, workspace)
     runPants(workspace, Seq("help", "goals"))
     runFastpass(fixture.config, workspace, Seq("--version"))
-    fixture.deleteIntelliJ(intellij)
+    fixture.cleanupIntelliJ(intellij)
     fixture.deleteWorkspace(workspace)
   }
 }
