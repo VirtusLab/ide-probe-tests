@@ -1,3 +1,3 @@
-FROM odisseus/ideprobe-pants-tests
+FROM odisseus/ideprobe-pants:latest
 ADD . /workspace
 WORKDIR /workspace

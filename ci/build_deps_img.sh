@@ -5,5 +5,6 @@
 USERNAME=odisseus
 
 DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build \
-  --tag  $USERNAME/ideprobe-pants-tests:latest \
+  --tag  $USERNAME/ideprobe-pants:latest \
   --file Dockerfile.deps .
+docker push $USERNAME/ideprobe-pants:latest

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -x
-export TEST_PATTERN="org.virtuslab.tests.Suite${1}"
-export TEST_TARGET="pantsTests"
+
 export IDEPROBE_DISPLAY=xvfb
 export FASTPASS_COURSIER_URL=https://github.com/coursier/coursier/releases/download/v2.0.13/coursier
 
