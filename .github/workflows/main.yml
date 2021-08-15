@@ -11,9 +11,7 @@ jobs:
     strategy:
       matrix:
         suite-name: [
-            "org.virtuslab.tests.Suite1",
-            "org.virtuslab.tests.Suite2",
-            "org.virtuslab.tests.Suite3"]
+            "org.virtuslab.tests.Suite1"]
         sbt-target: ["pantsTests"]
         os: [ubuntu-latest]
       fail-fast: false
@@ -31,7 +29,8 @@ jobs:
           df -h
       - name: Prepare the container
         run: |
-          docker build --tag ideprobe-pants:local .
+          DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build \
+            --tag  ideprobe-pants:local .
       - name: Run ${{ matrix.suite-name }}
         env:
           TEST_PATTERN: ${{ matrix.suite-name }}

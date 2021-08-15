@@ -1,56 +1,17 @@
 package org.virtuslab.tests.pants
 
-import java.nio.file.Paths
 import org.junit.Test
 import org.virtuslab.ideprobe.Assertions
-import org.virtuslab.ideprobe.RunningIntelliJFixture
-import org.virtuslab.ideprobe.protocol.FileRef
-import org.virtuslab.ideprobe.protocol.ProjectRef
-import org.virtuslab.ideprobe.protocol.Reference
-import org.virtuslab.ideprobe.Extensions._
-import org.virtuslab.ideprobe.dependencies.Plugin
-import org.virtuslab.ideprobe.ide.intellij.IntelliJFactory
+import org.virtuslab.ideprobe.junit4.IdeProbeTestSuite
+import org.virtuslab.ideprobe.robot.RobotPluginExtension
 
-final class BUILDFilesTest extends PantsTestSuite with Assertions {
+final class BUILDFilesTest extends IdeProbeTestSuite
+  with RobotPluginExtension with Assertions {
 
-  // bazel overrides handling of BUILD files that is in pants plugin
-  registerFixtureTransformer { fixture =>
-    val provider = fixture.intelliJProvider.asInstanceOf[IntelliJFactory]
-      .copy(plugins = fixture.intelliJProvider.plugins.filter {
-        case plugin: Plugin.Versioned =>
-          plugin.id != "com.google.idea.bazel.ijwb"
-        case _ => true
-      })
-    fixture.copy(intelliJProvider = provider)
-  }
-
-  @Test
-  def referencesOtherBUILDFilesInBsp(): Unit = {
-    checkReferencesToOtherBUILDFiles(openProjectWithBsp(_))
-  }
-
-  @Test
-  def referencesOtherBUILDFilesInPants(): Unit = {
-    checkReferencesToOtherBUILDFiles(openProjectWithPants(_))
-  }
-
-  def checkReferencesToOtherBUILDFiles(openProject: RunningIntelliJFixture => ProjectRef): Unit = {
+  @Test def checkReferencesToOtherBUILDFiles(): Unit = {
     fixtureFromConfig().run { intelliJ =>
-      val project = openProject(intelliJ)
-
-      def buildFile(name: String): FileRef = {
-        FileRef(intelliJ.workspace.resolve(name).resolve("BUILD"), project)
-      }
-
-      val dirWithBuildFileContainingRefs = intelliJ.config[String]("buildFiles.withReferences")
-      val dirsWithReferencedBuildFiles = intelliJ.config[Seq[String]]("buildFiles.referenced")
-
-      val references = intelliJ.probe.fileReferences(buildFile(dirWithBuildFileContainingRefs))
-      val expectedReferences = dirsWithReferencedBuildFiles.map { dir =>
-        Reference(Paths.get(dir).name, Reference.Target.File(buildFile(dir)))
-      }
-
-      assertContains(references)(expectedReferences: _*)
+      intelliJ.probe.withRobot.openProject(intelliJ.workspace)
+      intelliJ.probe.projectModel()
     }
   }
 
