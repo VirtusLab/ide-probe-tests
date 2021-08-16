@@ -14,13 +14,7 @@ ENV IDEPROBE_DISPLAY=xvfb
 WORKDIR /ideprobe-pants
 RUN --mount=type=bind,rw,source=.,target=. set -x \
  && ci/setup-consents.sh \
- && sbt projects > /dev/null 2> /dev/null \
- && echo '!!!!! SETUP START' \
- && sbt ciSetup/test \
- && echo '!!!!! SETUP END' \
- && rm -rf /tmp/ideprobe/cache \
- && rm -rf /tmp/ideprobe-pants-from-src \
- && rm -rf /root/.ideprobe-pantsPluginIC
+ && sbt projects > /dev/null 2> /dev/null
 WORKDIR /root
 RUN rmdir /ideprobe-pants
 ADD . /workspace

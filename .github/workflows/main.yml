@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         suite-name: [
-            "org.virtuslab.tests.Suite1"]
+            "org.virtuslab.tests.pants.BUILDFilesTest"]
         sbt-target: ["pantsTests"]
         os: [ubuntu-latest]
       fail-fast: false
