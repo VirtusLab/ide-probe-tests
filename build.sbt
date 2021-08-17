@@ -11,8 +11,6 @@ lazy val pantsTests = project
   .in(file("tests")).settings(
     name := "pants-tests",
     libraryDependencies += Dependencies.ideProbe.jUnitDriver,
-    libraryDependencies += Dependencies.ideProbe.pantsDriver,
-    libraryDependencies += Dependencies.ideProbe.bazelDriver,
-    libraryDependencies += Dependencies.ideProbe.scalaDriver,
+    libraryDependencies += Dependencies.ideProbe.robotDriver,
     libraryDependencies ++= Dependencies.junit
   )
