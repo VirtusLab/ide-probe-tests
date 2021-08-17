@@ -1,7 +1,9 @@
 package org.virtuslab.tests.pants
 
+import java.util.concurrent.Executors
 import org.virtuslab.ideprobe.{Assertions, IdeProbeFixture, Shell}
 import org.virtuslab.ideprobe.robot.RobotPluginExtension
+import scala.concurrent.Future
 
 object BUILDFilesTest extends IdeProbeFixture
   with RobotPluginExtension with Assertions {
@@ -12,7 +14,7 @@ object BUILDFilesTest extends IdeProbeFixture
       intelliJ.probe.projectModel()
     }
 
-    Shell.run("jstack", ProcessHandle.current.pid.toString)
+    Future(Shell.run("jstack", ProcessHandle.current.pid.toString))(scala.concurrent.ExecutionContext.global)
 }
 
 }

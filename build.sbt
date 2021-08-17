@@ -11,5 +11,6 @@ lazy val pantsTests = project
   .in(file("tests")).settings(
     name := "pants-tests",
     libraryDependencies += Dependencies.ideProbe.driver,
-    libraryDependencies += Dependencies.ideProbe.robotDriver
+    libraryDependencies += Dependencies.ideProbe.robotDriver,
+    fork in run := true
   )
