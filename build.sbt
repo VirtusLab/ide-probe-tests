@@ -1,4 +1,4 @@
-name := "ideprobe-pants"
+name := "ideprobe-gradle"
 
 organization.in(ThisBuild) := "com.twitter.ideprobe"
 version.in(ThisBuild) := "0.1"

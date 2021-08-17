@@ -7,14 +7,7 @@ on:
 
 jobs:
   test-suite:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        suite-name: [
-            "org.virtuslab.tests.pants.BUILDFilesTest"]
-        sbt-target: ["pantsTests"]
-        os: [ubuntu-latest]
-      fail-fast: false
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.0.0
       - name: Remove redundant packages
@@ -28,20 +21,13 @@ jobs:
           sudo rm -rf /opt/az
           df -h
       - name: Prepare the container
+        run: DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --tag  ideprobe-gradle:local .
+      - name: Run
         run: |
-          DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build \
-            --tag  ideprobe-pants:local .
-      - name: Run ${{ matrix.suite-name }}
-        env:
-          TEST_PATTERN: ${{ matrix.suite-name }}
-          TEST_TARGET: ${{ matrix.sbt-target }}
-        run: |
-          echo "TEST_PATTERN=$TEST_PATTERN"
-          echo "TEST_TARGET=$TEST_TARGET"
-          ./ci/run_docker.sh bash ci/test.sh
+          ./ci/run_docker.sh bash ci/run.sh
       - name: Upload screenshots
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: screenshots-${{ matrix.suite-name }}
+          name: screenshots
           path: /tmp/ideprobe/output
