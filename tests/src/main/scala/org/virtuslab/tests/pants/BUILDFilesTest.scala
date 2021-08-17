@@ -18,7 +18,7 @@ object BUILDFilesTest extends IdeProbeFixture
       intelliJ.probe.withRobot.openProject(intelliJ.workspace)
       intelliJ.probe.projectModel()
     }
-//    ec.execute(() => println("sad"))
+    pool.shutdownNow()
   }
 
 }
