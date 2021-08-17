@@ -8,9 +8,7 @@ import scala.concurrent.{ExecutionContext, Future}
 object BUILDFilesTest extends IdeProbeFixture
   with RobotPluginExtension with Assertions {
 
-  val pool = new ThreadPoolExecutor(0, Integer
-    .MAX_VALUE, 5L, TimeUnit.SECONDS, new SynchronousQueue[Runnable])
-  pool.allowCoreThreadTimeOut(true)
+  private val pool: ExecutorService = Executors.newCachedThreadPool
   override protected implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(pool)
 
   def main(args: Array[String]): Unit = {
@@ -18,7 +16,10 @@ object BUILDFilesTest extends IdeProbeFixture
       intelliJ.probe.withRobot.openProject(intelliJ.workspace)
       intelliJ.probe.projectModel()
     }
+    pool.shutdown()
     pool.shutdownNow()
+    println("Pools killed")
+    Shell.run("jstack", ProcessHandle.current().pid().toString)
   }
 
 }
