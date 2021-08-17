@@ -1,6 +1,6 @@
 package org.virtuslab.tests.pants
 
-import org.virtuslab.ideprobe.{Assertions, IdeProbeFixture}
+import org.virtuslab.ideprobe.{Assertions, IdeProbeFixture, Shell}
 import org.virtuslab.ideprobe.robot.RobotPluginExtension
 
 object BUILDFilesTest extends IdeProbeFixture
@@ -11,6 +11,8 @@ object BUILDFilesTest extends IdeProbeFixture
       intelliJ.probe.withRobot.openProject(intelliJ.workspace)
       intelliJ.probe.projectModel()
     }
-  }
+
+    Shell.run("jstack", ProcessHandle.current.pid.toString)
+}
 
 }
