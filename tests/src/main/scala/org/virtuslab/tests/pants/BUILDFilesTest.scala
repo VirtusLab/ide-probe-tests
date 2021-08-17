@@ -1,14 +1,12 @@
 package org.virtuslab.tests.pants
 
-import org.junit.Test
-import org.virtuslab.ideprobe.Assertions
-import org.virtuslab.ideprobe.junit4.IdeProbeTestSuite
+import org.virtuslab.ideprobe.{Assertions, IdeProbeFixture}
 import org.virtuslab.ideprobe.robot.RobotPluginExtension
 
-final class BUILDFilesTest extends IdeProbeTestSuite
+object BUILDFilesTest extends IdeProbeFixture
   with RobotPluginExtension with Assertions {
 
-  @Test def checkReferencesToOtherBUILDFiles(): Unit = {
+  def main(args: Array[String]): Unit = {
     fixtureFromConfig().run { intelliJ =>
       intelliJ.probe.withRobot.openProject(intelliJ.workspace)
       intelliJ.probe.projectModel()

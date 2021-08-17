@@ -18,7 +18,7 @@ object Dependencies {
       "org.virtuslab.ideprobe" %% name % version
     }
 
-    val jUnitDriver = apply("junit-driver")
+    val driver = apply("driver")
     val robotDriver = apply("robot-driver")
   }
 

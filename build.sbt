@@ -10,7 +10,6 @@ skip in publish := true
 lazy val pantsTests = project
   .in(file("tests")).settings(
     name := "pants-tests",
-    libraryDependencies += Dependencies.ideProbe.jUnitDriver,
-    libraryDependencies += Dependencies.ideProbe.robotDriver,
-    libraryDependencies ++= Dependencies.junit
+    libraryDependencies += Dependencies.ideProbe.driver,
+    libraryDependencies += Dependencies.ideProbe.robotDriver
   )
