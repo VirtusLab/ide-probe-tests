@@ -11,11 +11,6 @@ RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee -a /etc
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV IDEPROBE_DISPLAY=xvfb
-WORKDIR /ideprobe-pants
-RUN --mount=type=bind,rw,source=.,target=. set -x \
- && ci/setup-consents.sh \
- && sbt projects > /dev/null 2> /dev/null
-WORKDIR /root
-RUN rmdir /ideprobe-pants
 ADD . /workspace
 WORKDIR /workspace
+RUN ci/setup-consents.sh
