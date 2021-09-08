@@ -34,15 +34,17 @@ class RerunFailedTestsTest extends PantsTestSuite {
       // Hence we need to wait for logs to appear before accessing them.
       intelliJ.probe.await(WaitLogic.constant(1.second))
 
-      val errorsInitial = intelliJ.probe.errors
+      val errorsInitial = getTestsMessages(intelliJ)
+
       assertEquals(s"number of test suites in in $moduleName", 1, result.suites.size)
-      assertEquals("initial number of errors", errorsInitial.size, 2)
+      assertEquals("initial number of errors", 2, errorsInitial.size)
+
       assertEquals(
         "initial test results",
         Set("Tests failed: 1, passed: 1"),
         errorsInitial.map(_.content).toSet)
       intelliJ.probe.invokeAction("RerunFailedTests")
-      val errorsRerun = intelliJ.probe.errors.filterNot(errorsInitial.contains)
+      val errorsRerun = getTestsMessages(intelliJ).filterNot(errorsInitial.contains)
       assertEquals("number of rerun errors", errorsInitial.size, 2)
       assertEquals(
         "rerun results",
@@ -51,4 +53,7 @@ class RerunFailedTestsTest extends PantsTestSuite {
     }
   }
 
+  private def getTestsMessages(intelliJ: RunningIntelliJFixture) = {
+    intelliJ.probe.errors.filter(err => err.content.contains("Tests failed"))
+  }
 }
