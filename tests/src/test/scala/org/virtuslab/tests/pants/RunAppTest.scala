@@ -14,10 +14,10 @@ class RunAppTest extends PantsTestSuite with ConfigFormat {
     runsMainClass("pants", openProjectWithPants(_), _.probe.compileAllTargets().assertSuccess())
   }
 
-//  @Test
-//  def runsMainClassWithBsp(): Unit = {
-//    runsMainClass("bsp", openProjectWithBsp(_), _.probe.build().assertSuccess())
-//  }
+  @Test
+  def runsMainClassWithBsp(): Unit = {
+    runsMainClass("bsp", openProjectWithBsp(_), _.probe.build().assertSuccess())
+  }
 
   def runsMainClass(
     configSuffix: String,
