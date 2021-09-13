@@ -22,17 +22,17 @@ class Suite2
 @RunWith(classOf[Suite])
 @SuiteClasses(
   Array(
-    classOf[RunAppTest],
-    classOf[RunTestsTest],
-    classOf[RerunFailedTestsTest]
+//    classOf[RunAppTest],
+//    classOf[RunTestsTest],
+//    classOf[RerunFailedTestsTest]
   ))
 class Suite1
 
 @RunWith(classOf[Suite])
 @SuiteClasses(
   Array(
-//    classOf[PantsOpenProjectBenchmark],
-//    classOf[OpenProjectTestBazel],
-//    classOf[BazelProjectOpenBenchmark]
+    classOf[PantsOpenProjectBenchmark],
+    classOf[OpenProjectTestBazel],
+    classOf[BazelProjectOpenBenchmark]
   ))
 class Suite3
