@@ -31,8 +31,8 @@ class Suite1
 @RunWith(classOf[Suite])
 @SuiteClasses(
   Array(
-    classOf[PantsOpenProjectBenchmark],
-    classOf[OpenProjectTestBazel],
-    classOf[BazelProjectOpenBenchmark]
+//    classOf[PantsOpenProjectBenchmark],
+//    classOf[OpenProjectTestBazel],
+//    classOf[BazelProjectOpenBenchmark]
   ))
 class Suite3
