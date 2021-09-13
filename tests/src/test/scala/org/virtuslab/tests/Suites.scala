@@ -10,21 +10,21 @@ import org.virtuslab.tests.pants.open._
 @RunWith(classOf[Suite])
 @SuiteClasses(
   Array(
-    classOf[OpenProjectTestFastpassWithCmdLine],
-    classOf[OpenProjectTestPantsPlugin],
-    classOf[OpenProjectTestFastpassWithWizard],
-    classOf[BUILDFilesTest],
-    classOf[PantsSettingsTest],
-    classOf[ThriftIdeaPluginTest]
+//    classOf[OpenProjectTestFastpassWithCmdLine],
+//    classOf[OpenProjectTestPantsPlugin],
+//    classOf[OpenProjectTestFastpassWithWizard],
+//    classOf[BUILDFilesTest],
+//    classOf[PantsSettingsTest],
+//    classOf[ThriftIdeaPluginTest]
   ))
 class Suite2
 
 @RunWith(classOf[Suite])
 @SuiteClasses(
   Array(
-//    classOf[RunAppTest],
-//    classOf[RunTestsTest],
-//    classOf[RerunFailedTestsTest]
+    classOf[RunAppTest],
+    classOf[RunTestsTest],
+    classOf[RerunFailedTestsTest]
   ))
 class Suite1
 
