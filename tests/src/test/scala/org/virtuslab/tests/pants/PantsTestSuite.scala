@@ -9,13 +9,13 @@ trait PantsTestSuite
   extends IdeProbeTestSuite
     with PantsPluginExtension
     with PantsPluginExtraExtensions
-{
-  override def openProjectWithPants(intelliJ: RunningIntelliJFixture, waitLogic: WaitLogic): ProjectRef = {
-    val projectPath = runPantsIdeaPlugin(intelliJ.workspace, targetsFromConfig(intelliJ))
-    intelliJ.probe.openProject(projectPath, waitLogic)
-  }
-
-  private def targetsFromConfig(intelliJ: RunningIntelliJFixture): Seq[String] = {
-    intelliJ.config[Seq[String]]("pants.import.targets")
-  }
-}
+//{
+//  override def openProjectWithPants(intelliJ: RunningIntelliJFixture, waitLogic: WaitLogic): ProjectRef = {
+//    val projectPath = runPantsIdeaPlugin(intelliJ.workspace, targetsFromConfig(intelliJ))
+//    intelliJ.probe.openProject(projectPath, waitLogic)
+//  }
+//
+//  private def targetsFromConfig(intelliJ: RunningIntelliJFixture): Seq[String] = {
+//    intelliJ.config[Seq[String]]("pants.import.targets")
+//  }
+//}
