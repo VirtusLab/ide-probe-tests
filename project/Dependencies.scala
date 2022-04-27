@@ -2,12 +2,12 @@ import sbt._
 
 object Dependencies {
   val junit = Seq(
-    "junit" % "junit" % "4.12" % Test,
+    "junit" % "junit" % "4.13.2" % Test,
     ("com.novocode" % "junit-interface" % "0.11" % Test).exclude("junit", "junit-dep")
   )
   
   object ideProbe {
-    val version = "0.16.0"
+    val version = "0.24.0"
     val resolvers = Seq(
       Resolver.sonatypeRepo("public"),
       Resolver.sonatypeRepo("snapshots"),

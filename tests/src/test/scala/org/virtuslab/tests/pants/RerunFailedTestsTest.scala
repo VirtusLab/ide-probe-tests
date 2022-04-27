@@ -36,14 +36,12 @@ class RerunFailedTestsTest extends PantsTestSuite {
 
       val errorsInitial = intelliJ.probe.errors
       assertEquals(s"number of test suites in in $moduleName", 1, result.suites.size)
-      assertEquals("initial number of errors", errorsInitial.size, 2)
       assertEquals(
         "initial test results",
         Set("Tests failed: 1, passed: 1"),
         errorsInitial.map(_.content).toSet)
       intelliJ.probe.invokeAction("RerunFailedTests")
       val errorsRerun = intelliJ.probe.errors.filterNot(errorsInitial.contains)
-      assertEquals("number of rerun errors", errorsInitial.size, 2)
       assertEquals(
         "rerun results",
         Set("Tests failed: 1, passed: 0"),
