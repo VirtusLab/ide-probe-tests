@@ -2,7 +2,7 @@
 
 set -x
 
-DOCKER_IMAGE=ideprobe-pants:local
+DOCKER_IMAGE=ideprobe-tests:local
 DOCKER_DIRECTORY=/tmp/ide-probe/output
 HOST_DIRECTORY=/tmp/ide-probe/output
 
