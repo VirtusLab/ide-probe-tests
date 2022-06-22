@@ -13,7 +13,6 @@ object OpenProjectTestBazel
 
 }
 
-// JDK11 only!
 class OpenProjectTestBazel extends BazelTestSuite with OpenProjectTest {
 
   override def intelliJ: RunningIntelliJFixture = OpenProjectTestBazel.intelliJ

@@ -9,21 +9,12 @@ RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee -a /etc
     && apt-get -qq -o=Dpkg::Use-Pty=0 install libxtst6 libx11-6 libxrender1 xvfb openssh-server python3 python3-pip \
         python3-venv sbt libssl-dev pkg-config x11-apps vim imagemagick zip openjdk-11-jre openjdk-11-jdk
 
-# Get Rust
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
-ENV PATH="/root/.cargo/bin:${PATH}"
-
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-WORKDIR /ideprobe-pants
+WORKDIR /ideprobe-tests
 RUN --mount=type=bind,rw,source=.,target=. set -x \
  && ci/setup-consents.sh \
  && sbt projects > /dev/null 2> /dev/null \
- && echo '!!!!! SETUP START' \
- && sbt ciSetup/test \
- && echo '!!!!! SETUP END' \
  && rm -rf /tmp/ideprobe/cache \
- && rm -rf /tmp/ideprobe-pants-from-src \
- && rm -rf /root/.ideprobe-pantsPluginIC
 WORKDIR /root
-RUN rmdir /ideprobe-pants
+RUN rmdir /ideprobe-tests
