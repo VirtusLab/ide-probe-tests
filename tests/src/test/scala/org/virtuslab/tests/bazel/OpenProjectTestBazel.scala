@@ -2,6 +2,9 @@ package org.virtuslab.tests.bazel
 
 import org.junit.{Assert, Test}
 import org.virtuslab.ideprobe.RunningIntelliJFixture
+import org.virtuslab.ideprobe.WaitLogic
+import org.virtuslab.ideprobe.bazel.BazelImportSpec
+import org.virtuslab.ideprobe.bazel.BazelProbeDriver
 import org.virtuslab.ideprobe.protocol.{ProjectRef, TestScope}
 import org.virtuslab.tests.{OpenProjectTest, OpenProjectTestFixture}
 
