@@ -55,7 +55,7 @@ class OpenProjectTestBazel extends BazelTestSuite with OpenProjectTest {
     val definitionLocation = intelliJ.config[Location]("goToDefinition.definitionLocation")
     val path = intelliJ.workspace.resolve(referenceLocation.file).toRealPath()
     intelliJ.probe.openEditor(path)
-    intelliJ.probe.goToLineColumn(ProjectRef.Default, referenceLocation.line, referenceLocation.column)
+    intelliJ.probe.goToLineColumn(referenceLocation.line, referenceLocation.column)
     intelliJ.probe.await()
     intelliJ.probe.invokeActionAsync("com.intellij.plugins.thrift.editor.GoToThriftDefinition")
     val openFiles = intelliJ.probe.listOpenEditors()
